@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Olympus RolePlay — Character Creation</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="overlay" class="hidden">
+    <div id="card">
+        <div id="card-header">
+            <div id="logo">OLYMPUS <span>ROLEPLAY</span></div>
+            <div id="subtitle">Δημιουργία Χαρακτήρα</div>
+        </div>
+
+        <form id="creation-form">
+            <div class="field">
+                <label for="firstname">Όνομα</label>
+                <input type="text" id="firstname" maxlength="20" placeholder="π.χ. Νίκος" required>
+            </div>
+
+            <div class="field">
+                <label for="lastname">Επώνυμο</label>
+                <input type="text" id="lastname" maxlength="20" placeholder="π.χ. Παπαδόπουλος" required>
+            </div>
+
+            <div class="field">
+                <label for="birthdate">Ημερομηνία Γέννησης</label>
+                <input type="date" id="birthdate" required>
+            </div>
+
+            <div class="field">
+                <label>Φύλο</label>
+                <div id="gender-toggle">
+                    <button type="button" class="gender-btn active" data-gender="male">Άνδρας</button>
+                    <button type="button" class="gender-btn" data-gender="female">Γυναίκα</button>
+                </div>
+            </div>
+
+            <div id="error" class="hidden"></div>
+
+            <div id="actions">
+                <button type="button" id="cancel-btn">Ακύρωση</button>
+                <button type="submit" id="submit-btn">Δημιουργία</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

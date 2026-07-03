@@ -153,6 +153,7 @@ install_resource "https://github.com/Qbox-project/qbx_spawn/releases/latest/down
 install_resource "https://github.com/overextended/ox_lib/releases/latest/download/ox_lib.zip"          "$OX_DIR"   "ox_lib"       "yes"
 install_resource "https://github.com/overextended/oxmysql/releases/latest/download/oxmysql.zip"        "$OX_DIR"   "oxmysql"      "yes"
 install_resource "https://github.com/overextended/ox_inventory/releases/latest/download/ox_inventory.zip" "$OX_DIR" "ox_inventory" "yes"
+install_resource "https://github.com/overextended/ox_target/releases/latest/download/ox_target.zip"     "$OX_DIR"   "ox_target"    "yes"
 install_resource "https://github.com/iLLeniumStudios/illenium-appearance/releases/latest/download/illenium-appearance.zip" "$STANDALONE_DIR" "illenium-appearance" "yes"
 
 # ---------------------------------------------------

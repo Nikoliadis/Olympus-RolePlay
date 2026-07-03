@@ -1,0 +1,177 @@
+:root {
+    --gold: #C0A355;
+    --gold-dim: #C0A35599;
+    --bg: rgba(12, 12, 12, 0.82);
+    --bg-soft: rgba(20, 20, 20, 0.7);
+    --track: rgba(255, 255, 255, 0.08);
+    --health: #C0A355;
+    --armor: #8fa9c9;
+    --stamina: #7fc98f;
+    --hunger: #d99a4e;
+    --thirst: #4ea9d9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #eaeaea;
+    overflow: hidden;
+    user-select: none;
+}
+
+#hud {
+    position: fixed;
+    left: 1.4vw;
+    bottom: 1.4vh;
+    width: clamp(260px, 19vw, 340px);
+    background: var(--bg);
+    border: 1px solid var(--gold-dim);
+    border-radius: 10px;
+    padding: 12px 14px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+#hud.hidden {
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+}
+
+#top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(192, 163, 85, 0.25);
+    padding-bottom: 8px;
+}
+
+#job-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.3px;
+}
+
+#job-grade {
+    font-size: 11px;
+    color: #b8b8b8;
+    margin-top: 1px;
+}
+
+#clock {
+    font-size: 14px;
+    font-weight: 600;
+    color: #eaeaea;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.5px;
+}
+
+#stats-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+#cash-panel, #ammo-panel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--bg-soft);
+    padding: 4px 9px;
+    border-radius: 6px;
+    border: 1px solid rgba(192, 163, 85, 0.15);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#cash-value {
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+}
+
+#ammo-panel.hidden {
+    display: none;
+}
+
+.icon {
+    font-size: 13px;
+    line-height: 1;
+}
+
+#bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bar-row .icon {
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.bar-track {
+    flex: 1;
+    height: 7px;
+    background: var(--track);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-health   { background: var(--health); }
+.fill-armor    { background: var(--armor); }
+.fill-stamina  { background: var(--stamina); }
+.fill-hunger   { background: var(--hunger); }
+.fill-thirst   { background: var(--thirst); }
+
+.bar-row.pulse .bar-fill {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0%   { filter: brightness(1); }
+    40%  { filter: brightness(1.6); }
+    100% { filter: brightness(1); }
+}
+
+.value-pop {
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive: μικρότερες αναλύσεις */
+@media (max-width: 1280px) {
+    #hud { width: clamp(230px, 24vw, 320px); }
+}

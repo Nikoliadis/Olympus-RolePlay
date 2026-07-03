@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Olympus RolePlay HUD</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="hud" class="hidden">
+    <div id="top-row">
+        <div id="job-panel">
+            <div id="job-label">—</div>
+            <div id="job-grade"></div>
+        </div>
+        <div id="clock">00:00</div>
+    </div>
+
+    <div id="stats-row">
+        <div id="cash-panel">
+            <span class="icon">💰</span>
+            <span id="cash-value">€0</span>
+        </div>
+        <div id="ammo-panel" class="hidden">
+            <span class="icon">🔫</span>
+            <span id="ammo-value">0</span>
+        </div>
+    </div>
+
+    <div id="bars">
+        <div class="bar-row" data-bar="health">
+            <span class="icon">❤️</span>
+            <div class="bar-track"><div class="bar-fill fill-health" style="width:100%"></div></div>
+        </div>
+        <div class="bar-row" data-bar="armor">
+            <span class="icon">🛡️</span>
+            <div class="bar-track"><div class="bar-fill fill-armor" style="width:0%"></div></div>
+        </div>
+        <div class="bar-row" data-bar="stamina">
+            <span class="icon">🏃</span>
+            <div class="bar-track"><div class="bar-fill fill-stamina" style="width:100%"></div></div>
+        </div>
+        <div class="bar-row" data-bar="hunger">
+            <span class="icon">🍔</span>
+            <div class="bar-track"><div class="bar-fill fill-hunger" style="width:100%"></div></div>
+        </div>
+        <div class="bar-row" data-bar="thirst">
+            <span class="icon">💧</span>
+            <div class="bar-track"><div class="bar-fill fill-thirst" style="width:100%"></div></div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

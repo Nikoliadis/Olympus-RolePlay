@@ -64,8 +64,11 @@ ensure spawnmanager
 ##    qb-clothes:client:CreateFirstCharacter τρέχει από εδώ κατά τη δημιουργία νέου χαρακτήρα.
 ensure illenium-appearance
 
-## 5. qbx_spawn — classic spawn location picker (Legion Square = κλασικό Job
-##    Center, Paleto Bay, Motels). Χρησιμοποιείται όταν φορτώνει υπάρχων χαρακτήρας.
+## 5. qbx_spawn — classic spawn location picker (Legion Square, Paleto Bay,
+##    Motels). Χρησιμοποιείται όταν φορτώνει ΥΠΑΡΧΩΝ χαρακτήρας (Play button).
+##    Για ΝΕΟΥΣ χαρακτήρες το spawn γίνεται πάντα στο Job Center μέσω του
+##    δικού μας olympus_spawn (βλ. [custom] resources παρακάτω) — έχει προτεραιότητα
+##    όταν είναι ενεργό (patched στο qbx_core/client/character.lua).
 ensure qbx_spawn
 
 ## 6. qbx_core (framework core)
@@ -74,16 +77,23 @@ ensure qbx_core
 ## 7. ox_inventory (inventory system, εξαρτάται από qbx_core)
 ensure ox_inventory
 
-## 8. Υπόλοιπα [ox] resources
-# ensure ox_target
+## 8. ox_target — target-based interaction (χρησιμοποιείται από το olympus_jobcenter)
+ensure ox_target
+
+## 9. Υπόλοιπα [ox] resources
 # ensure ox_doorlock
 
-## 9. [standalone] resources
+## 10. [standalone] resources
 ensure vMenu
 # ensure <standalone_resource>
 
-## 10. [custom] resources (δικά μας scripts)
-# ensure <custom_resource>
+## 11. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
+##     το olympus_spawn πρέπει να τρέχει πριν χρειαστεί το qbx_core
+##     (character creation), το olympus_jobcenter χρειάζεται το qbx_core
+##     ήδη ενεργό για SetJob.
+ensure olympus_spawn
+ensure olympus_hud
+ensure olympus_jobcenter
 
 ### ---------------------------------------------------
 ### vMenu — staff/admin only permissions
