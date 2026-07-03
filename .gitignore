@@ -39,6 +39,7 @@ logs/
 *.sql
 *.sql.gz
 *.bak
+!database/*.sql
 
 # ==============================
 # OS / Editor files
@@ -70,6 +71,8 @@ fx_out.log
 fx_err.log
 server_boot.log
 .replxx_history
+/txData/
+/db/
 
 # ==============================
 # Third-party resources (fetched via install.sh, not committed)

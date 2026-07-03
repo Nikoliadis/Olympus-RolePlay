@@ -77,6 +77,10 @@ Olympus-RolePlay/
    ```sql
    CREATE DATABASE olympus_roleplay CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
+   Το `qbx_core` δημιουργεί μόνο του τους περισσότερους πίνακες του στην πρώτη εκκίνηση (μέσω `resources/[qbox]/qbx_core/qbx_core.sql`). Τρέξε επιπλέον το [`database/extra_tables.sql`](database/extra_tables.sql) για πίνακες που δεν καλύπτονται από αυτό (π.χ. `playerskins`, που διαβάζεται σε κάθε character load αλλά δεν δημιουργείται από ξεχωριστό appearance resource):
+   ```bash
+   mysql -u <user> -p olympus_roleplay < database/extra_tables.sql
+   ```
 
 5. **Αντίγραψε το config template**
    ```bash
