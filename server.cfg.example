@@ -59,21 +59,30 @@ ensure oxmysql
 ##    fade-in που ποτέ δεν έρχεται, γιατί το spawnmanager είναι αυτό που το καλεί).
 ensure spawnmanager
 
-## 4. qbx_core (framework core)
+## 4. illenium-appearance — outfit/εμφάνιση χαρακτήρα. Το qbx_core καλεί
+##    exports['illenium-appearance']:setPedAppearance(...) και το event
+##    qb-clothes:client:CreateFirstCharacter τρέχει από εδώ κατά τη δημιουργία νέου χαρακτήρα.
+ensure illenium-appearance
+
+## 5. qbx_spawn — classic spawn location picker (Legion Square = κλασικό Job
+##    Center, Paleto Bay, Motels). Χρησιμοποιείται όταν φορτώνει υπάρχων χαρακτήρας.
+ensure qbx_spawn
+
+## 6. qbx_core (framework core)
 ensure qbx_core
 
-## 5. ox_inventory (inventory system, εξαρτάται από qbx_core)
+## 7. ox_inventory (inventory system, εξαρτάται από qbx_core)
 ensure ox_inventory
 
-## 6. Υπόλοιπα [ox] resources
+## 8. Υπόλοιπα [ox] resources
 # ensure ox_target
 # ensure ox_doorlock
 
-## 7. [standalone] resources
+## 9. [standalone] resources
 ensure vMenu
 # ensure <standalone_resource>
 
-## 8. [custom] resources (δικά μας scripts)
+## 10. [custom] resources (δικά μας scripts)
 # ensure <custom_resource>
 
 ### ---------------------------------------------------

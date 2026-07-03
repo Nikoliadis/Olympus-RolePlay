@@ -10,12 +10,14 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 | Utility library | [ox_lib](https://github.com/overextended/ox_lib) |
 | Database driver | [oxmysql](https://github.com/overextended/oxmysql) |
 | Inventory | [ox_inventory](https://github.com/overextended/ox_inventory) |
+| Spawn selection | [qbx_spawn](https://github.com/Qbox-project/qbx_spawn) |
+| Character appearance/outfits | [illenium-appearance](https://github.com/iLLeniumStudios/illenium-appearance) |
 | Database | MariaDB |
 | Scripts | Lua (server/client), JavaScript (Discord bot) |
 
 ## Απαιτούμενα Dependencies
 
-Τα resources του QBox, του Overextended, το vMenu, και το spawnmanager (`qbx_core`, `ox_lib`, `oxmysql`, `ox_inventory`, `vMenu`, `spawnmanager`) είναι **third-party κώδικας τρίτων και δεν βρίσκονται μέσα στο repo** (βλ. `.gitignore` — οι φάκελοι `resources/[qbox]/`, `resources/[ox]/`, `resources/[standalone]/vMenu/` και `resources/[standalone]/spawnmanager/` είναι εξαιρεμένοι, ακριβώς όπως το `node_modules/`). Κατεβαίνουν αυτόματα με το `install.sh` (δες παρακάτω).
+Όλα τα third-party resources (`qbx_core`, `qbx_spawn`, `ox_lib`, `oxmysql`, `ox_inventory`, `illenium-appearance`, `vMenu`, `spawnmanager`) είναι **κώδικας τρίτων και δεν βρίσκονται μέσα στο repo** (βλ. `.gitignore` — οι φάκελοι `resources/[qbox]/` και `resources/[ox]/`, καθώς και τα επιμέρους `resources/[standalone]/vMenu/`, `resources/[standalone]/spawnmanager/`, `resources/[standalone]/illenium-appearance/`, είναι εξαιρεμένοι, ακριβώς όπως το `node_modules/`). Κατεβαίνουν αυτόματα με το `install.sh` (δες παρακάτω).
 
 Χρειάζεται επίσης να κατέβουν ξεχωριστά (χειροκίνητα):
 
@@ -33,9 +35,11 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 
 Αυτό θα κατεβάσει, κάνει unzip, και σβήσει το .zip για:
 - `qbx_core` → `resources/[qbox]/qbx_core`
+- `qbx_spawn` → `resources/[qbox]/qbx_spawn`
 - `ox_lib` → `resources/[ox]/ox_lib`
 - `oxmysql` → `resources/[ox]/oxmysql`
 - `ox_inventory` → `resources/[ox]/ox_inventory`
+- `illenium-appearance` → `resources/[standalone]/illenium-appearance`
 - `vMenu` → `resources/[standalone]/vMenu`
 - `spawnmanager` → `resources/[standalone]/spawnmanager` (raw αρχεία από το [citizenfx/cfx-server-data](https://github.com/citizenfx/cfx-server-data), όχι release .zip — δες παρακάτω γιατί είναι απαραίτητο)
 
@@ -54,7 +58,7 @@ Olympus-RolePlay/
 ├── resources/
 │   ├── [qbox]/          # QBox core resources (qbx_core, qbx_*)
 │   ├── [ox]/            # Overextended resources (ox_lib, oxmysql, ox_inventory)
-│   ├── [standalone]/    # Standalone resources τρίτων (vMenu, spawnmanager, χωρίς framework dependency)
+│   ├── [standalone]/    # Standalone resources τρίτων (vMenu, spawnmanager, illenium-appearance, χωρίς framework dependency)
 │   └── [custom]/        # Δικά μας custom scripts (jobs, gangs, HUD, κλπ)
 ├── discord-bot/         # JavaScript Discord bot
 ├── server.cfg           # Configuration του server (δεν committάρεται, βλ. server.cfg.example)
@@ -111,9 +115,21 @@ Olympus-RolePlay/
 1. `ox_lib`
 2. `oxmysql`
 3. `spawnmanager` (πρέπει να τρέχει πριν το qbx_core το καλέσει κατά το character spawn)
-4. `qbx_core`
-5. `ox_inventory`
-6. Υπόλοιπα `[qbox]`, `[standalone]`, `[custom]` resources
+4. `illenium-appearance` (character appearance/outfits)
+5. `qbx_spawn` (spawn location picker)
+6. `qbx_core`
+7. `ox_inventory`
+8. Υπόλοιπα `[qbox]`, `[standalone]`, `[custom]` resources
+
+## Spawn & Character Appearance
+
+Η ροή δημιουργίας/φόρτωσης χαρακτήρα:
+
+- **Νέος χαρακτήρας:** μετά τη δημιουργία, ο παίκτης κάνει spawn στο `defaultSpawn` του qbx_core (`resources/[qbox]/qbx_core/config/shared.lua`) — ρυθμισμένο στο **Legion Square** (κλασικό Job Center, coords `195.17, -933.77, 29.7, 144.5`). Αμέσως μετά ανοίγει αυτόματα το outfit creation menu του `illenium-appearance` (event `qb-clothes:client:CreateFirstCharacter`).
+- **Υπάρχων χαρακτήρας:** στο "Play" από το character select, ανοίγει το `qbx_spawn` UI με επιλογές τοποθεσίας — **Legion Square** (Job Center), **Paleto Bay**, **Motels**, ή η τελευταία θέση αποσύνδεσης (ρύθμιση στο `resources/[qbox]/qbx_spawn/config/client.lua`).
+- Το `illenium-appearance` επίσης χειρίζεται clothing shops/barber/tattoo (μέσω radial/target menu) και αποθηκεύει outfits στους πίνακες `playerskins` (ενεργή εμφάνιση) και `player_outfits` (αποθηκευμένα σετ) — δες [`database/extra_tables.sql`](database/extra_tables.sql).
+
+> **Σημείωση για starter items:** το `qbx_core` default config δίνει από προεπιλογή `id_card`/`driver_license` ως starter items, κάτι που απαιτεί το resource `qbx_idcard` (+ εξάρτηση `MugShotBase64`). Δεν τα έχουμε εγκαταστήσει — τα αφαιρέσαμε από το `config/shared.lua` starterItems (μένει μόνο `phone`) ώστε να μην κρασάρει η δημιουργία χαρακτήρα. Πρόσθεσέ τα ξανά αν εγκαταστήσεις το `qbx_idcard`.
 
 ## vMenu (Staff/Admin only)
 

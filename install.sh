@@ -2,7 +2,8 @@
 #
 # Olympus RolePlay — install.sh
 # Κατεβάζει τα prebuilt releases (.zip) των third-party resources
-# (QBox + ox_* + vMenu + spawnmanager) που δεν είναι committed στο repo.
+# (QBox + ox_* + vMenu + spawnmanager + illenium-appearance) που δεν είναι
+# committed στο repo.
 #
 set -euo pipefail
 
@@ -148,9 +149,11 @@ install_resource() {
 # 3. Λήψη resources (prebuilt releases, σταθερό "latest/download" filename)
 # ---------------------------------------------------
 install_resource "https://github.com/Qbox-project/qbx_core/releases/latest/download/qbx_core.zip"      "$QBOX_DIR" "qbx_core"     "yes"
+install_resource "https://github.com/Qbox-project/qbx_spawn/releases/latest/download/qbx_spawn.zip"    "$QBOX_DIR" "qbx_spawn"    "yes"
 install_resource "https://github.com/overextended/ox_lib/releases/latest/download/ox_lib.zip"          "$OX_DIR"   "ox_lib"       "yes"
 install_resource "https://github.com/overextended/oxmysql/releases/latest/download/oxmysql.zip"        "$OX_DIR"   "oxmysql"      "yes"
 install_resource "https://github.com/overextended/ox_inventory/releases/latest/download/ox_inventory.zip" "$OX_DIR" "ox_inventory" "yes"
+install_resource "https://github.com/iLLeniumStudios/illenium-appearance/releases/latest/download/illenium-appearance.zip" "$STANDALONE_DIR" "illenium-appearance" "yes"
 
 # ---------------------------------------------------
 # 4. vMenu — το asset filename περιέχει version number
