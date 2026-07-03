@@ -25,21 +25,19 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 
 ### Εγκατάσταση Dependencies (`install.sh`)
 
-Το script `install.sh` κατεβάζει αυτόματα με `git clone` τα 4 βασικά third-party resources στη σωστή θέση:
+Το script `install.sh` κατεβάζει αυτόματα τα **prebuilt releases (.zip)** των 4 βασικών third-party resources από το GitHub Releases του κάθε repo (όχι raw source clone — έτσι έρχονται έτοιμα τα built web UI assets):
 
 ```bash
 ./install.sh
 ```
 
-Αυτό θα κάνει clone:
+Αυτό θα κατεβάσει, κάνει unzip, και σβήσει το .zip για:
 - `qbx_core` → `resources/[qbox]/qbx_core`
 - `ox_lib` → `resources/[ox]/ox_lib`
 - `oxmysql` → `resources/[ox]/oxmysql`
 - `ox_inventory` → `resources/[ox]/ox_inventory`
 
-Ελέγχει πρώτα αν το `git` είναι εγκατεστημένο και σταματάει με μήνυμα σφάλματος αν λείπει. Αν κάποιο resource υπάρχει ήδη τοπικά, παραλείπεται (δεν το ξανακατεβάζει).
-
-> **Σημείωση:** το `ox_lib`, το `oxmysql` και το `ox_inventory` έχουν build step (web UI) που δεν περιλαμβάνεται στο raw source clone. Αν δεις σφάλματα τύπου `Unable to load UI` ή `module not found` όταν τρέξεις τον server, κατέβασε τα prebuilt `.zip` από τη σελίδα **Releases** του κάθε repo (π.χ. `https://github.com/overextended/ox_lib/releases/latest`) και αντικατέστησε τον αντίστοιχο φάκελο.
+Ελέγχει πρώτα αν υπάρχει `curl` ή `wget` και `unzip`, και σταματάει με μήνυμα σφάλματος αν λείπουν. Αν κάποιο resource υπάρχει ήδη τοπικά, παραλείπεται (δεν το ξανακατεβάζει).
 
 ## Δομή Φακέλων
 
