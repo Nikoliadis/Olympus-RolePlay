@@ -11,9 +11,11 @@ end
 -- ---------------------------------------------------
 -- Emergency unstick: αν κάποιο resource αφήσει το NUI focus κολλημένο
 -- (π.χ. login/character creation NUI που δεν έκλεισε σωστά), τα βελάκια/ESC
--- σταματούν να φτάνουν στο παιχνίδι. Το /fixui το ξεκολλάει χειροκίνητα.
+-- σταματούν να φτάνουν στο παιχνίδι. Διαθέσιμο ΚΑΙ ως keybind (F10) ώστε να
+-- μη χρειάζεται να θυμάται κανείς να πληκτρολογήσει /fixui — δουλεύει πάντα,
+-- ακόμα κι αν κάποιο NUI έχει το focus αυτή τη στιγμή.
 -- ---------------------------------------------------
-RegisterCommand('fixui', function()
+local function fixUi()
     SetNuiFocus(false, false)
     SetNuiFocusKeepInput(false)
     lib.notify({
@@ -21,7 +23,10 @@ RegisterCommand('fixui', function()
         description = 'NUI focus reset. Δοκίμασε ξανά τα βελάκια/ESC.',
         type = 'inform'
     })
-end, false)
+end
+
+RegisterKeyMapping('fixui', 'Olympus RolePlay: Emergency NUI focus reset', 'keyboard', 'F10')
+RegisterCommand('fixui', fixUi, false)
 
 -- ---------------------------------------------------
 -- Health / Armor / Stamina — client-side statebags
