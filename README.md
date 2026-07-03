@@ -15,15 +15,31 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 
 ## Απαιτούμενα Dependencies
 
-Πρέπει να κατέβουν ξεχωριστά (δεν περιλαμβάνονται στο repo) και να μπουν στο αντίστοιχο resource folder:
+Τα resources του QBox και του Overextended (`qbx_core`, `ox_lib`, `oxmysql`, `ox_inventory`) είναι **third-party κώδικας τρίτων και δεν βρίσκονται μέσα στο repo** (βλ. `.gitignore` — οι φάκελοι `resources/[qbox]/` και `resources/[ox]/` είναι εξαιρεμένοι, ακριβώς όπως το `node_modules/`). Κατεβαίνουν αυτόματα με το `install.sh` (δες παρακάτω).
+
+Χρειάζεται επίσης να κατέβουν ξεχωριστά (χειροκίνητα):
 
 - [FXServer artifacts](https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/) (τελευταίο recommended build)
-- [qbx_core](https://github.com/Qbox-project/qbx_core) → `resources/[qbox]/`
-- [ox_lib](https://github.com/overextended/ox_lib) → `resources/[ox]/`
-- [oxmysql](https://github.com/overextended/oxmysql) → `resources/[ox]/`
-- [ox_inventory](https://github.com/overextended/ox_inventory) → `resources/[ox]/`
 - [MariaDB](https://mariadb.org/download/) 10.6+
 - [Node.js](https://nodejs.org/) 18+ (για το Discord bot)
+
+### Εγκατάσταση Dependencies (`install.sh`)
+
+Το script `install.sh` κατεβάζει αυτόματα με `git clone` τα 4 βασικά third-party resources στη σωστή θέση:
+
+```bash
+./install.sh
+```
+
+Αυτό θα κάνει clone:
+- `qbx_core` → `resources/[qbox]/qbx_core`
+- `ox_lib` → `resources/[ox]/ox_lib`
+- `oxmysql` → `resources/[ox]/oxmysql`
+- `ox_inventory` → `resources/[ox]/ox_inventory`
+
+Ελέγχει πρώτα αν το `git` είναι εγκατεστημένο και σταματάει με μήνυμα σφάλματος αν λείπει. Αν κάποιο resource υπάρχει ήδη τοπικά, παραλείπεται (δεν το ξανακατεβάζει).
+
+> **Σημείωση:** το `ox_lib`, το `oxmysql` και το `ox_inventory` έχουν build step (web UI) που δεν περιλαμβάνεται στο raw source clone. Αν δεις σφάλματα τύπου `Unable to load UI` ή `module not found` όταν τρέξεις τον server, κατέβασε τα prebuilt `.zip` από τη σελίδα **Releases** του κάθε repo (π.χ. `https://github.com/overextended/ox_lib/releases/latest`) και αντικατέστησε τον αντίστοιχο φάκελο.
 
 ## Δομή Φακέλων
 
@@ -49,7 +65,10 @@ Olympus-RolePlay/
 
 2. **Κατέβασε τα FXServer artifacts** και βάλε τα στη ρίζα του project (εξαιρούνται από το git).
 
-3. **Εγκατάστησε τα dependencies στο `resources/`** σύμφωνα με τη δομή παραπάνω (`ox_lib`, `oxmysql`, `qbx_core`, `ox_inventory`).
+3. **Τρέξε το install script** για να κατέβουν τα third-party resources
+   ```bash
+   ./install.sh
+   ```
 
 4. **Στήσε τη βάση δεδομένων (MariaDB)**
    ```sql

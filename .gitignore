@@ -70,3 +70,9 @@ fx_out.log
 fx_err.log
 server_boot.log
 .replxx_history
+
+# ==============================
+# Third-party resources (fetched via install.sh, not committed)
+# ==============================
+resources/\[qbox\]/
+resources/\[ox\]/
