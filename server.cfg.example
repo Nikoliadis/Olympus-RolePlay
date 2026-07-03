@@ -1,0 +1,86 @@
+### =====================================================
+### Olympus RolePlay — server.cfg (template)
+### Αντίγραψέ το ως "server.cfg" και συμπλήρωσε τα placeholders
+### =====================================================
+
+### ---------------------------------------------------
+### Endpoints & Ports
+### ---------------------------------------------------
+endpoint_add_tcp "0.0.0.0:30120"
+endpoint_add_udp "0.0.0.0:30120"
+
+### ---------------------------------------------------
+### Server Info
+### ---------------------------------------------------
+sv_hostname "Olympus RolePlay"
+sv_projectName "Olympus RolePlay"
+sv_projectDesc "QBox FiveM Roleplay Server"
+sets tags "roleplay, qbox, greek"
+sets locale "en-US"
+
+### ---------------------------------------------------
+### License Key
+### https://keymaster.fivem.net/
+### ---------------------------------------------------
+sv_licenseKey "CHANGE_ME_LICENSE_KEY"
+
+### ---------------------------------------------------
+### Database Connection (oxmysql)
+### Μορφή: mysql://user:password@host:port/database
+### ---------------------------------------------------
+set mysql_connection_string "mysql://CHANGE_ME_USER:CHANGE_ME_PASSWORD@127.0.0.1:3306/olympus_roleplay?charset=utf8mb4"
+
+### ---------------------------------------------------
+### Server Slots
+### ---------------------------------------------------
+sv_maxclients 48
+
+### ---------------------------------------------------
+### Steam / Discord API keys
+### ---------------------------------------------------
+sv_authMaxVariance 1
+sv_authMinTrust 5
+set steam_webApiKey "CHANGE_ME_STEAM_API_KEY"
+set discord_botToken "CHANGE_ME_DISCORD_BOT_TOKEN"
+
+### ---------------------------------------------------
+### Resource Loading — Η ΣΕΙΡΑ ΕΧΕΙ ΣΗΜΑΣΙΑ
+### ---------------------------------------------------
+
+## 1. ox_lib πρώτο (dependency για όλα τα υπόλοιπα)
+ensure ox_lib
+
+## 2. oxmysql δεύτερο (database layer)
+ensure oxmysql
+
+## 3. qbx_core τρίτο (framework core)
+ensure qbx_core
+
+## 4. ox_inventory τέταρτο (inventory system, εξαρτάται από qbx_core)
+ensure ox_inventory
+
+## 5. Υπόλοιπα [ox] resources
+# ensure ox_target
+# ensure ox_doorlock
+
+## 6. [standalone] resources
+# ensure <standalone_resource>
+
+## 7. [custom] resources (δικά μας scripts)
+# ensure <custom_resource>
+
+### ---------------------------------------------------
+### Convars / Misc
+### ---------------------------------------------------
+set onesync on
+setr onesync_enableInfinity 1
+setr inventory:framework "qbx"
+sv_enforceGameBuild 2802
+sv_scriptHookAllowed 0
+
+### ---------------------------------------------------
+### Owner / Admin (steam:xxxxxxxx ή license:xxxxxxxx)
+### ---------------------------------------------------
+add_ace group.admin command allow
+add_ace group.admin command.quit deny
+add_principal identifier.CHANGE_ME_ADMIN_ID group.admin
