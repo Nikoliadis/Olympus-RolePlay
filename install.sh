@@ -244,6 +244,7 @@ fi
 # ---------------------------------------------------
 install_resource "https://github.com/Qbox-project/qbx_garages/releases/latest/download/qbx_garages.zip"           "$QBOX_DIR" "qbx_garages"      "yes"
 install_resource "https://github.com/Qbox-project/qbx_truckrobbery/releases/latest/download/qbx_truckrobbery.zip" "$QBOX_DIR" "qbx_truckrobbery" "yes"
+install_resource "https://github.com/Qbox-project/qbx_vehicles/releases/latest/download/qbx_vehicles.zip"         "$QBOX_DIR" "qbx_vehicles"     "yes"
 install_resource "https://github.com/mkafrin/PolyZone/releases/latest/download/PolyZone.zip"                      "$STANDALONE_DIR" "PolyZone"    "no"
 
 # ---------------------------------------------------

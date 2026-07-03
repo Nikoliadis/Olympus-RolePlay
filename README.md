@@ -13,6 +13,7 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 | Spawn selection | [qbx_spawn](https://github.com/Qbox-project/qbx_spawn) |
 | Character appearance/outfits | [illenium-appearance](https://github.com/iLLeniumStudios/illenium-appearance) |
 | Target/interaction | [ox_target](https://github.com/overextended/ox_target), [qb-target](https://github.com/qbcore-framework/qb-target), [PolyZone](https://github.com/mkafrin/PolyZone) |
+| Vehicle ownership | [qbx_vehicles](https://github.com/Qbox-project/qbx_vehicles) |
 | Jobs / properties | qbx_garages, qbx_vehicleshop, qbx_taxijob, qbx_mechanicjob, qbx_properties, qbx_police, qbx_ambulancejob, qbx_truckrobbery, qbx_phone (όλα [Qbox-project](https://github.com/Qbox-project)) |
 | Database | MariaDB |
 | Scripts | Lua (server/client), JavaScript (Discord bot) |
@@ -40,6 +41,7 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 - `qbx_spawn` → `resources/[qbox]/qbx_spawn`
 - `qbx_garages` → `resources/[qbox]/qbx_garages`
 - `qbx_truckrobbery` → `resources/[qbox]/qbx_truckrobbery`
+- `qbx_vehicles` → `resources/[qbox]/qbx_vehicles`
 - `ox_lib` → `resources/[ox]/ox_lib`
 - `oxmysql` → `resources/[ox]/oxmysql`
 - `ox_inventory` → `resources/[ox]/ox_inventory`
@@ -144,11 +146,14 @@ Olympus-RolePlay/
 4. `illenium-appearance` (character appearance/outfits)
 5. `qbx_spawn` (spawn location picker)
 6. `qbx_core`
-7. `ox_inventory`
-8. `ox_target`
-9. `PolyZone`, `qb-target` (χρειάζονται από τα qbx_* job resources παρακάτω)
-10. `qbx_garages`, `qbx_vehicleshop`, `qbx_taxijob`, `qbx_mechanicjob`, `qbx_properties`, `qbx_police`, `qbx_ambulancejob`, `qbx_truckrobbery`, `qbx_phone`
-11. Υπόλοιπα `[qbox]`, `[standalone]`, `[custom]` resources
+7. `qbx_vehicles` (vehicle ownership — **hard dependency** για το `ox_inventory` bridge, `qbx_garages`, `qbx_vehicleshop`· χωρίς αυτό κάνουν assert-crash)
+8. `ox_inventory`
+9. `ox_target`
+10. `PolyZone`, `qb-target` (χρειάζονται από τα qbx_* job resources παρακάτω)
+11. `qbx_garages`, `qbx_vehicleshop`, `qbx_taxijob`, `qbx_mechanicjob`, `qbx_properties`, `qbx_police`, `qbx_ambulancejob`, `qbx_truckrobbery`, `qbx_phone`
+12. Υπόλοιπα `[qbox]`, `[standalone]`, `[custom]` resources
+
+> **Διορθωμένο upstream πρόβλημα:** το `qbx_phone` (`server/main.lua:1`) κάνει `require '@qbx_garages.config.shared'`, αλλά η τρέχουσα release του `qbx_garages` το μετακίνησε στο `config/server.lua` (ασυμβατότητα version μεταξύ δύο ξεχωριστών Qbox-project repos). Προσθέσαμε ένα compatibility shim στο `resources/[qbox]/qbx_garages/config/shared.lua` που αναδημοσιεύει το `garages` table από το `config/server.lua` (μαζί με τα απαραίτητα `VehicleType`/`GarageType`/`VehicleState` enum globals από το `shared/types.lua`, που τα χρειάζεται). **Αυτό είναι patch σε third-party gitignored κώδικα** — αν διαγράψεις το `resources/[qbox]/qbx_garages` και ξανατρέξεις `install.sh`, θα χαθεί και θα χρειαστεί να το ξαναφτιάξεις.
 
 ## Spawn & Character Appearance
 

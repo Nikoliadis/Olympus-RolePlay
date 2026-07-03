@@ -74,18 +74,23 @@ ensure qbx_spawn
 ## 6. qbx_core (framework core)
 ensure qbx_core
 
-## 7. ox_inventory (inventory system, εξαρτάται από qbx_core)
+## 7. qbx_vehicles — vehicle ownership/garage data. Απαιτείται (hard
+##    dependency, assert-crash αν λείπει) από το ox_inventory bridge, το
+##    qbx_garages, και το qbx_vehicleshop — πρέπει να τρέχει πριν από αυτά.
+ensure qbx_vehicles
+
+## 8. ox_inventory (inventory system, εξαρτάται από qbx_core)
 ensure ox_inventory
 
-## 8. ox_target — target-based interaction (χρησιμοποιείται από το olympus_jobcenter)
+## 9. ox_target — target-based interaction (χρησιμοποιείται από το olympus_jobcenter)
 ensure ox_target
 
-## 9. PolyZone / qb-target — χρειάζονται από αρκετά από τα qbx_* job resources
+## 10. PolyZone / qb-target — χρειάζονται από αρκετά από τα qbx_* job resources
 ##    παρακάτω (zones, εναλλακτικό target system). Πρέπει να τρέχουν πριν από αυτά.
 ensure PolyZone
 ensure qb-target
 
-## 10. Qbox official job/property resources.
+## 11. Qbox official job/property resources.
 ##     ΣΗΜΕΙΩΣΗ: τα qbx_input, qbx_menu, qbx_interact ΔΕΝ βρέθηκαν ως πραγματικά
 ##     resources κάτω από το Qbox-project στο GitHub — δεν κατεβαίνουν από το
 ##     install.sh, οπότε ΔΕΝ τα κάνουμε ensure (θα έδινε "Couldn't find resource").
@@ -100,17 +105,17 @@ ensure qbx_ambulancejob
 ensure qbx_truckrobbery
 ensure qbx_phone
 
-## 11. Υπόλοιπα [ox] resources
+## 12. Υπόλοιπα [ox] resources
 # ensure ox_doorlock
 
-## 12. [standalone] resources
+## 13. [standalone] resources
 ## ΣΗΜΕΙΩΣΗ: το screenshot-basic δεν έχει GitHub release ΚΑΙ απαιτεί webpack
 ## build (δεν υπάρχουν built dist/ αρχεία στο raw source) — δεν κατεβαίνει
 ## αυτόματα, βλ. README για χειροκίνητη εγκατάσταση αν το χρειαστείς.
 ensure vMenu
 # ensure <standalone_resource>
 
-## 13. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
+## 14. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
 ##     το olympus_spawn πρέπει να τρέχει πριν χρειαστεί το qbx_core
 ##     (character creation), το olympus_jobcenter χρειάζεται το qbx_core
 ##     ήδη ενεργό για SetJob.

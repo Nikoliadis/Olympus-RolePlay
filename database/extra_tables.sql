@@ -35,3 +35,30 @@ CREATE TABLE IF NOT EXISTS `player_outfits` (
   KEY `citizenid` (`citizenid`),
   CONSTRAINT `fk_player_outfits_citizenid` FOREIGN KEY (`citizenid`) REFERENCES `players` (`citizenid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- qbx_vehicles (server/main.lua) αποθηκεύει εδώ τα ιδιόκτητα οχήματα των
+-- παικτών (garage, mods, plate, κλπ). Απαιτείται από qbx_garages,
+-- qbx_vehicleshop, και το bridge του ox_inventory (glovebox/trunk).
+-- Schema από το επίσημο resources/[qbox]/qbx_vehicles/vehicles.sql.
+CREATE TABLE IF NOT EXISTS `player_vehicles` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `license` VARCHAR(50) DEFAULT NULL,
+  `citizenid` VARCHAR(50) DEFAULT NULL,
+  `vehicle` VARCHAR(50) DEFAULT NULL,
+  `hash` VARCHAR(50) DEFAULT NULL,
+  `mods` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `plate` VARCHAR(15) NOT NULL,
+  `fakeplate` VARCHAR(50) DEFAULT NULL,
+  `garage` VARCHAR(50) DEFAULT NULL,
+  `fuel` INT(11) DEFAULT 100,
+  `engine` FLOAT DEFAULT 1000,
+  `body` FLOAT DEFAULT 1000,
+  `state` INT(11) DEFAULT 1,
+  `depotprice` INT(11) NOT NULL DEFAULT 0,
+  `drivingdistance` INT(50) DEFAULT NULL,
+  `status` TEXT DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `plate` (`plate`),
+  KEY `citizenid` (`citizenid`),
+  CONSTRAINT `fk_player_vehicles_citizenid` FOREIGN KEY (`citizenid`) REFERENCES `players` (`citizenid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
