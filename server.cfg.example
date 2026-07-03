@@ -13,8 +13,8 @@ endpoint_add_udp "0.0.0.0:30120"
 ### Server Info
 ### ---------------------------------------------------
 sv_hostname "Olympus RolePlay"
-sv_projectName "Olympus RolePlay"
-sv_projectDesc "QBox FiveM Roleplay Server"
+sets sv_projectName "Olympus RolePlay"
+sets sv_projectDesc "Greek FiveM Roleplay Server"
 sets tags "roleplay, qbox, greek"
 sets locale "en-US"
 
@@ -84,6 +84,9 @@ setr onesync_enableInfinity 1
 setr inventory:framework "qbx"
 sv_enforceGameBuild 2802
 sv_scriptHookAllowed 0
+
+## Σβήνει το "Welcome to Qbox!" startup μήνυμα του qbx_core.
+set qbx:acknowledge true
 
 ### ---------------------------------------------------
 ### Owner / Admin (steam:xxxxxxxx ή license:xxxxxxxx)
