@@ -15,7 +15,7 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 
 ## Απαιτούμενα Dependencies
 
-Τα resources του QBox, του Overextended, και το vMenu (`qbx_core`, `ox_lib`, `oxmysql`, `ox_inventory`, `vMenu`) είναι **third-party κώδικας τρίτων και δεν βρίσκονται μέσα στο repo** (βλ. `.gitignore` — οι φάκελοι `resources/[qbox]/`, `resources/[ox]/` και `resources/[standalone]/vMenu/` είναι εξαιρεμένοι, ακριβώς όπως το `node_modules/`). Κατεβαίνουν αυτόματα με το `install.sh` (δες παρακάτω).
+Τα resources του QBox, του Overextended, το vMenu, και το spawnmanager (`qbx_core`, `ox_lib`, `oxmysql`, `ox_inventory`, `vMenu`, `spawnmanager`) είναι **third-party κώδικας τρίτων και δεν βρίσκονται μέσα στο repo** (βλ. `.gitignore` — οι φάκελοι `resources/[qbox]/`, `resources/[ox]/`, `resources/[standalone]/vMenu/` και `resources/[standalone]/spawnmanager/` είναι εξαιρεμένοι, ακριβώς όπως το `node_modules/`). Κατεβαίνουν αυτόματα με το `install.sh` (δες παρακάτω).
 
 Χρειάζεται επίσης να κατέβουν ξεχωριστά (χειροκίνητα):
 
@@ -25,7 +25,7 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 
 ### Εγκατάσταση Dependencies (`install.sh`)
 
-Το script `install.sh` κατεβάζει αυτόματα τα **prebuilt releases (.zip)** των 5 third-party resources από το GitHub Releases του κάθε repo (όχι raw source clone — έτσι έρχονται έτοιμα τα built web UI assets):
+Το script `install.sh` κατεβάζει αυτόματα τα **prebuilt releases (.zip)** των third-party resources από το GitHub Releases του κάθε repo (όχι raw source clone — έτσι έρχονται έτοιμα τα built web UI assets):
 
 ```bash
 ./install.sh
@@ -37,10 +37,13 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 - `oxmysql` → `resources/[ox]/oxmysql`
 - `ox_inventory` → `resources/[ox]/ox_inventory`
 - `vMenu` → `resources/[standalone]/vMenu`
+- `spawnmanager` → `resources/[standalone]/spawnmanager` (raw αρχεία από το [citizenfx/cfx-server-data](https://github.com/citizenfx/cfx-server-data), όχι release .zip — δες παρακάτω γιατί είναι απαραίτητο)
 
 Ελέγχει πρώτα αν υπάρχει `curl` ή `wget` και `unzip`, και σταματάει με μήνυμα σφάλματος αν λείπουν. Αν κάποιο resource υπάρχει ήδη τοπικά, παραλείπεται (δεν το ξανακατεβάζει). Για το vMenu, επειδή το GitHub release asset του έχει version number στο filename (π.χ. `vMenu-3.8.20.zip`), το script βρίσκει αυτόματα το σωστό URL μέσω του GitHub API αντί να υποθέτει σταθερό filename.
 
 > **Σημείωση:** το folder name `vMenu` (κεφαλαίο M) είναι υποχρεωτικό — το ίδιο το resource ελέγχει το όνομα του φακέλου του στο runtime και αρνείται να λειτουργήσει σωστά αν δεν ταιριάζει ακριβώς (case-sensitive).
+
+> **Σημαντικό: `spawnmanager` είναι απαραίτητο, όχι προαιρετικό.** Το `qbx_core` καλεί `exports.spawnmanager:spawnPlayer(...)` όταν φορτώνει χαρακτήρας. Χωρίς αυτό το resource, ο client κολλάει σε **μαύρη οθόνη** στο character select (το σφάλμα καταπίνεται σιωπηλά από ένα `pcall`, και ο client μπαίνει σε ατέρμονο loop περιμένοντας ένα `DoScreenFadeIn` που ποτέ δεν έρχεται). Πρέπει να είναι `ensure`d **πριν** το `qbx_core` στο `server.cfg`.
 
 ## Δομή Φακέλων
 
@@ -51,7 +54,7 @@ Olympus-RolePlay/
 ├── resources/
 │   ├── [qbox]/          # QBox core resources (qbx_core, qbx_*)
 │   ├── [ox]/            # Overextended resources (ox_lib, oxmysql, ox_inventory)
-│   ├── [standalone]/    # Standalone resources τρίτων (vMenu, χωρίς framework dependency)
+│   ├── [standalone]/    # Standalone resources τρίτων (vMenu, spawnmanager, χωρίς framework dependency)
 │   └── [custom]/        # Δικά μας custom scripts (jobs, gangs, HUD, κλπ)
 ├── discord-bot/         # JavaScript Discord bot
 ├── server.cfg           # Configuration του server (δεν committάρεται, βλ. server.cfg.example)
@@ -107,9 +110,10 @@ Olympus-RolePlay/
 
 1. `ox_lib`
 2. `oxmysql`
-3. `qbx_core`
-4. `ox_inventory`
-5. Υπόλοιπα `[qbox]`, `[standalone]`, `[custom]` resources
+3. `spawnmanager` (πρέπει να τρέχει πριν το qbx_core το καλέσει κατά το character spawn)
+4. `qbx_core`
+5. `ox_inventory`
+6. Υπόλοιπα `[qbox]`, `[standalone]`, `[custom]` resources
 
 ## vMenu (Staff/Admin only)
 

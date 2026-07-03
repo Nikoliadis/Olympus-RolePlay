@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # Olympus RolePlay — install.sh
-# Κατεβάζει τα prebuilt releases (.zip) των third-party resources (QBox + ox_* + vMenu)
-# που δεν είναι committed στο repo.
+# Κατεβάζει τα prebuilt releases (.zip) των third-party resources
+# (QBox + ox_* + vMenu + spawnmanager) που δεν είναι committed στο repo.
 #
 set -euo pipefail
 
@@ -166,6 +166,31 @@ if [ ! -d "$STANDALONE_DIR/vMenu" ]; then
     install_resource "$VMENU_ZIP_URL" "$STANDALONE_DIR" "vMenu" "no"
 else
     info "Το vMenu υπάρχει ήδη στο $STANDALONE_DIR — παραλείπεται."
+fi
+
+# ---------------------------------------------------
+# 5. spawnmanager — default FiveM system resource, δεν διανέμεται ως GitHub
+#    Release .zip (είναι μέρος του citizenfx/cfx-server-data repo), οπότε
+#    κατεβάζουμε τα raw αρχεία απευθείας αντί να χρησιμοποιήσουμε install_resource.
+#    Το qbx_core καλεί exports.spawnmanager:spawnPlayer(...) κατά το character
+#    load — χωρίς αυτό ο client κολλάει σε μαύρη οθόνη.
+# ---------------------------------------------------
+SPAWNMANAGER_DIR="$STANDALONE_DIR/spawnmanager"
+if [ -d "$SPAWNMANAGER_DIR" ]; then
+    info "Το spawnmanager υπάρχει ήδη στο $STANDALONE_DIR — παραλείπεται."
+else
+    info "Κατεβάζω το spawnmanager..."
+    mkdir -p "$SPAWNMANAGER_DIR"
+    SPAWNMANAGER_BASE="https://raw.githubusercontent.com/citizenfx/cfx-server-data/master/resources/%5Bmanagers%5D/spawnmanager"
+    if download "$SPAWNMANAGER_BASE/fxmanifest.lua" "$SPAWNMANAGER_DIR/fxmanifest.lua" \
+        && download "$SPAWNMANAGER_BASE/spawnmanager.lua" "$SPAWNMANAGER_DIR/spawnmanager.lua" \
+        && [ -s "$SPAWNMANAGER_DIR/fxmanifest.lua" ] && [ -s "$SPAWNMANAGER_DIR/spawnmanager.lua" ]; then
+        success "spawnmanager κατέβηκε και εγκαταστάθηκε επιτυχώς στο $SPAWNMANAGER_DIR"
+    else
+        fail "Αποτυχία λήψης του spawnmanager"
+        rm -rf "$SPAWNMANAGER_DIR"
+        exit 1
+    fi
 fi
 
 echo ""
