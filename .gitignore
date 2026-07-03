@@ -61,3 +61,12 @@ Thumbs.db
 /alpine/
 fxserver.exe
 run.cmd
+
+# ==============================
+# FXServer / txAdmin runtime artifacts
+# ==============================
+fx_pid.txt
+fx_out.log
+fx_err.log
+server_boot.log
+.replxx_history
