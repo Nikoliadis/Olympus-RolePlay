@@ -64,10 +64,17 @@ ensure ox_inventory
 # ensure ox_doorlock
 
 ## 6. [standalone] resources
+ensure vMenu
 # ensure <standalone_resource>
 
 ## 7. [custom] resources (δικά μας scripts)
 # ensure <custom_resource>
+
+### ---------------------------------------------------
+### vMenu — staff/admin only permissions
+### Όλα τα permissions ορίζονται στο config/permissions.cfg (μόνο group.admin).
+### ---------------------------------------------------
+exec config/permissions.cfg
 
 ### ---------------------------------------------------
 ### Convars / Misc

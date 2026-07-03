@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Olympus RolePlay — install.sh
-# Κατεβάζει τα prebuilt releases (.zip) των third-party resources (QBox + ox_*)
+# Κατεβάζει τα prebuilt releases (.zip) των third-party resources (QBox + ox_* + vMenu)
 # που δεν είναι committed στο repo.
 #
 set -euo pipefail
@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 QBOX_DIR="$ROOT_DIR/resources/[qbox]"
 OX_DIR="$ROOT_DIR/resources/[ox]"
+STANDALONE_DIR="$ROOT_DIR/resources/[standalone]"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -39,6 +40,16 @@ if ! command -v unzip >/dev/null 2>&1; then
 fi
 success "Το unzip είναι εγκατεστημένο"
 
+fetch_url() {
+    # fetch_url <url>  -> τυπώνει το response body στο stdout
+    local url="$1"
+    if [ "$DOWNLOADER" = "curl" ]; then
+        curl -sL "$url"
+    else
+        wget -q -O - "$url"
+    fi
+}
+
 download() {
     # download <url> <output_file>
     # Σημείωση: κάνουμε cd στον φάκελο του output και χρησιμοποιούμε relative
@@ -58,23 +69,45 @@ download() {
     fi
 }
 
-mkdir -p "$QBOX_DIR" "$OX_DIR"
+resolve_latest_zip_url() {
+    # resolve_latest_zip_url <owner/repo>
+    # Βρίσκει το πρώτο .zip asset του τελευταίου release μέσω του GitHub API.
+    # Χρησιμοποιείται για resources (π.χ. vMenu) που δεν έχουν σταθερό
+    # filename στο "releases/latest/download/..." (το asset περιέχει version number).
+    local repo="$1"
+    fetch_url "https://api.github.com/repos/$repo/releases/latest" \
+        | grep -oE '"browser_download_url":[[:space:]]*"[^"]+\.zip"' \
+        | head -n1 \
+        | grep -oE 'https://[^"]+\.zip'
+}
+
+mkdir -p "$QBOX_DIR" "$OX_DIR" "$STANDALONE_DIR"
 
 # ---------------------------------------------------
 # 2. Βοηθητική συνάρτηση λήψης prebuilt release .zip
-#    install_resource <owner/repo> <target_dir> <resource_name>
+#    install_resource <zip_url> <target_dir> <resource_name> <has_wrapper: yes|no>
+#
+#    has_wrapper=yes -> το zip περιέχει έναν φάκελο <resource_name>/ στη ρίζα
+#                        (π.χ. ox_lib.zip -> ox_lib/fxmanifest.lua, ...)
+#    has_wrapper=no  -> το zip περιέχει τα αρχεία απευθείας στη ρίζα
+#                        (π.χ. vMenu-x.y.z.zip -> fxmanifest.lua, ...)
 # ---------------------------------------------------
 install_resource() {
-    local repo="$1"
+    local zip_url="$1"
     local target_dir="$2"
     local name="$3"
-    local zip_url="https://github.com/$repo/releases/latest/download/$name.zip"
+    local has_wrapper="${4:-yes}"
     local zip_path="$target_dir/$name.zip"
     local extract_dir="$target_dir/.${name}_extract"
 
     if [ -d "$target_dir/$name" ]; then
         info "Το $name υπάρχει ήδη στο $target_dir — παραλείπεται (διέγραψέ το χειροκίνητα αν θες re-download)."
         return 0
+    fi
+
+    if [ -z "$zip_url" ]; then
+        fail "Δεν βρέθηκε .zip asset για το $name."
+        exit 1
     fi
 
     info "Κατεβάζω το $name (prebuilt release)..."
@@ -84,7 +117,7 @@ install_resource() {
     fi
 
     if [ ! -s "$zip_path" ]; then
-        fail "Το $name.zip κατέβηκε άδειο — έλεγξε ότι το repo $repo έχει release με asset '$name.zip'."
+        fail "Το $name.zip κατέβηκε άδειο — έλεγξε το URL: $zip_url"
         rm -f "$zip_path"
         exit 1
     fi
@@ -99,28 +132,41 @@ install_resource() {
         exit 1
     fi
 
-    # Τα releases του overextended/qbox περιέχουν έναν φάκελο <name>/ μέσα στο zip.
-    if [ -d "$extract_dir/$name" ]; then
+    if [ "$has_wrapper" = "yes" ] && [ -d "$extract_dir/$name" ]; then
         mv "$extract_dir/$name" "$target_dir/$name"
+        rm -rf "$extract_dir"
     else
-        # Fallback: αν το zip δεν έχει wrapper folder, μετακίνησε ολόκληρο το extract_dir.
+        # Το zip δεν έχει wrapper folder (ή δεν βρέθηκε) -> μετακίνησε ό,τι εξήχθη.
         mv "$extract_dir" "$target_dir/$name"
-        extract_dir=""
     fi
 
     rm -f "$zip_path"
-    [ -n "$extract_dir" ] && rm -rf "$extract_dir"
-
     success "$name κατέβηκε και εγκαταστάθηκε επιτυχώς στο $target_dir/$name"
 }
 
 # ---------------------------------------------------
-# 3. Λήψη resources (prebuilt releases)
+# 3. Λήψη resources (prebuilt releases, σταθερό "latest/download" filename)
 # ---------------------------------------------------
-install_resource "Qbox-project/qbx_core"     "$QBOX_DIR" "qbx_core"
-install_resource "overextended/ox_lib"       "$OX_DIR"   "ox_lib"
-install_resource "overextended/oxmysql"      "$OX_DIR"   "oxmysql"
-install_resource "overextended/ox_inventory" "$OX_DIR"   "ox_inventory"
+install_resource "https://github.com/Qbox-project/qbx_core/releases/latest/download/qbx_core.zip"      "$QBOX_DIR" "qbx_core"     "yes"
+install_resource "https://github.com/overextended/ox_lib/releases/latest/download/ox_lib.zip"          "$OX_DIR"   "ox_lib"       "yes"
+install_resource "https://github.com/overextended/oxmysql/releases/latest/download/oxmysql.zip"        "$OX_DIR"   "oxmysql"      "yes"
+install_resource "https://github.com/overextended/ox_inventory/releases/latest/download/ox_inventory.zip" "$OX_DIR" "ox_inventory" "yes"
+
+# ---------------------------------------------------
+# 4. vMenu — το asset filename περιέχει version number
+#    (π.χ. vMenu-3.8.20.zip), οπότε δεν υπάρχει σταθερό "latest/download/vMenu.zip".
+#    Βρίσκουμε το πραγματικό URL μέσω του GitHub API.
+# ---------------------------------------------------
+if [ ! -d "$STANDALONE_DIR/vMenu" ]; then
+    info "Ψάχνω το τελευταίο vMenu release asset..."
+    VMENU_ZIP_URL="$(resolve_latest_zip_url "TomGrobbe/vMenu")"
+    # Σημείωση: το folder ΠΡΕΠΕΙ να λέγεται ακριβώς "vMenu" (case sensitive) —
+    # το ίδιο το resource ελέγχει το όνομα του φακέλου του στο runtime και
+    # αρνείται να λειτουργήσει σωστά αν δεν ταιριάζει.
+    install_resource "$VMENU_ZIP_URL" "$STANDALONE_DIR" "vMenu" "no"
+else
+    info "Το vMenu υπάρχει ήδη στο $STANDALONE_DIR — παραλείπεται."
+fi
 
 echo ""
 success "Όλα τα third-party resources είναι έτοιμα."
