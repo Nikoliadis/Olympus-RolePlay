@@ -80,14 +80,37 @@ ensure ox_inventory
 ## 8. ox_target — target-based interaction (χρησιμοποιείται από το olympus_jobcenter)
 ensure ox_target
 
-## 9. Υπόλοιπα [ox] resources
+## 9. PolyZone / qb-target — χρειάζονται από αρκετά από τα qbx_* job resources
+##    παρακάτω (zones, εναλλακτικό target system). Πρέπει να τρέχουν πριν από αυτά.
+ensure PolyZone
+ensure qb-target
+
+## 10. Qbox official job/property resources.
+##     ΣΗΜΕΙΩΣΗ: τα qbx_input, qbx_menu, qbx_interact ΔΕΝ βρέθηκαν ως πραγματικά
+##     resources κάτω από το Qbox-project στο GitHub — δεν κατεβαίνουν από το
+##     install.sh, οπότε ΔΕΝ τα κάνουμε ensure (θα έδινε "Couldn't find resource").
+ensure qbx_garages
+ensure qbx_vehicleshop
+ensure qbx_taxijob
+ensure qbx_mechanicjob
+ensure qbx_properties
+## το "qbx_policejob" έχει μετονομαστεί σε "qbx_police" upstream
+ensure qbx_police
+ensure qbx_ambulancejob
+ensure qbx_truckrobbery
+ensure qbx_phone
+
+## 11. Υπόλοιπα [ox] resources
 # ensure ox_doorlock
 
-## 10. [standalone] resources
+## 12. [standalone] resources
+## ΣΗΜΕΙΩΣΗ: το screenshot-basic δεν έχει GitHub release ΚΑΙ απαιτεί webpack
+## build (δεν υπάρχουν built dist/ αρχεία στο raw source) — δεν κατεβαίνει
+## αυτόματα, βλ. README για χειροκίνητη εγκατάσταση αν το χρειαστείς.
 ensure vMenu
 # ensure <standalone_resource>
 
-## 11. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
+## 13. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
 ##     το olympus_spawn πρέπει να τρέχει πριν χρειαστεί το qbx_core
 ##     (character creation), το olympus_jobcenter χρειάζεται το qbx_core
 ##     ήδη ενεργό για SetJob.

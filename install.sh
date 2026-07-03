@@ -41,6 +41,12 @@ if ! command -v unzip >/dev/null 2>&1; then
 fi
 success "Το unzip είναι εγκατεστημένο"
 
+HAS_GIT="no"
+if command -v git >/dev/null 2>&1; then
+    HAS_GIT="yes"
+    success "Το git είναι εγκατεστημένο (χρειάζεται για μερικά resources χωρίς GitHub release)"
+fi
+
 fetch_url() {
     # fetch_url <url>  -> τυπώνει το response body στο stdout
     local url="$1"
@@ -146,6 +152,41 @@ install_resource() {
 }
 
 # ---------------------------------------------------
+# 2b. Βοηθητική συνάρτηση git clone για resources που ΔΕΝ έχουν κανένα
+#    GitHub release (μόνο source code) — π.χ. qbx_mechanicjob, qb-target.
+#    Ασφαλές μόνο για resources χωρίς build step (χωρίς web/dist ή webpack).
+#    git_clone_resource <repo_url> <target_dir> <resource_name>
+# ---------------------------------------------------
+git_clone_resource() {
+    local repo_url="$1"
+    local target_dir="$2"
+    local name="$3"
+
+    if [ -d "$target_dir/$name" ]; then
+        info "Το $name υπάρχει ήδη στο $target_dir — παραλείπεται (διέγραψέ το χειροκίνητα αν θες re-download)."
+        return 0
+    fi
+
+    if [ "$HAS_GIT" != "yes" ]; then
+        fail "Το $name δεν έχει GitHub release — χρειάζεται git clone, αλλά το git δεν είναι εγκατεστημένο. Εγκατέστησέ το και ξανατρέξε το script."
+        exit 1
+    fi
+
+    info "Κλωνοποιώ το $name (δεν έχει GitHub release, raw clone)..."
+    # Σημείωση: όπως και το curl.exe, το native git.exe (mingw) σε Git Bash/MSYS
+    # χαλάει το path translation με absolute path με αγκύλες (π.χ. .../[qbox]/...)
+    # — αναφέρει επιτυχία αλλά δεν δημιουργεί τίποτα. Κάνουμε cd + relative path.
+    if (cd "$target_dir" && git clone --depth 1 "$repo_url" "$name" > /dev/null 2>&1) && [ -d "$target_dir/$name" ]; then
+        rm -rf "$target_dir/$name/.git"
+        success "$name κλωνοποιήθηκε επιτυχώς στο $target_dir/$name"
+    else
+        fail "Αποτυχία κλωνοποίησης του $name από $repo_url"
+        rm -rf "$target_dir/$name"
+        exit 1
+    fi
+}
+
+# ---------------------------------------------------
 # 3. Λήψη resources (prebuilt releases, σταθερό "latest/download" filename)
 # ---------------------------------------------------
 install_resource "https://github.com/Qbox-project/qbx_core/releases/latest/download/qbx_core.zip"      "$QBOX_DIR" "qbx_core"     "yes"
@@ -196,6 +237,36 @@ else
         exit 1
     fi
 fi
+
+
+# ---------------------------------------------------
+# 6. Επιπλέον Qbox official resources — έχουν GitHub release .zip
+# ---------------------------------------------------
+install_resource "https://github.com/Qbox-project/qbx_garages/releases/latest/download/qbx_garages.zip"           "$QBOX_DIR" "qbx_garages"      "yes"
+install_resource "https://github.com/Qbox-project/qbx_truckrobbery/releases/latest/download/qbx_truckrobbery.zip" "$QBOX_DIR" "qbx_truckrobbery" "yes"
+install_resource "https://github.com/mkafrin/PolyZone/releases/latest/download/PolyZone.zip"                      "$STANDALONE_DIR" "PolyZone"    "no"
+
+# ---------------------------------------------------
+# 7. Επιπλέον Qbox resources ΧΩΡΙΣ GitHub release (μόνο source, git clone).
+#    Επιβεβαιωμένο ότι δεν έχουν build step (δεν χρησιμοποιούν web/dist ή webpack).
+# ---------------------------------------------------
+git_clone_resource "https://github.com/Qbox-project/qbx_mechanicjob.git"  "$QBOX_DIR" "qbx_mechanicjob"
+git_clone_resource "https://github.com/Qbox-project/qbx_properties.git"   "$QBOX_DIR" "qbx_properties"
+git_clone_resource "https://github.com/Qbox-project/qbx_taxijob.git"      "$QBOX_DIR" "qbx_taxijob"
+git_clone_resource "https://github.com/Qbox-project/qbx_vehicleshop.git" "$QBOX_DIR" "qbx_vehicleshop"
+git_clone_resource "https://github.com/Qbox-project/qbx_ambulancejob.git" "$QBOX_DIR" "qbx_ambulancejob"
+git_clone_resource "https://github.com/Qbox-project/qbx_phone.git"        "$QBOX_DIR" "qbx_phone"
+# Σημείωση: το "qbx_policejob" έχει μετονομαστεί σε "qbx_police" upstream.
+git_clone_resource "https://github.com/Qbox-project/qbx_police.git"       "$QBOX_DIR" "qbx_police"
+git_clone_resource "https://github.com/qbcore-framework/qb-target.git"    "$STANDALONE_DIR" "qb-target"
+
+# ---------------------------------------------------
+# ΔΕΝ κατεβαίνουν αυτόματα (δες README για λεπτομέρειες):
+#   - screenshot-basic: δεν έχει GitHub release ΚΑΙ χρειάζεται webpack build
+#     (τα resources/client.js, server.js δεν υπάρχουν στο raw source).
+#   - qbx_input, qbx_menu, qbx_interact: δεν βρέθηκαν resources με αυτά τα
+#     ονόματα κάτω από το Qbox-project στο GitHub.
+# ---------------------------------------------------
 
 echo ""
 success "Όλα τα third-party resources είναι έτοιμα."

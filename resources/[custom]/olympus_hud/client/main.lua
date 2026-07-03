@@ -9,6 +9,21 @@ local function nui(action, data)
 end
 
 -- ---------------------------------------------------
+-- Emergency unstick: αν κάποιο resource αφήσει το NUI focus κολλημένο
+-- (π.χ. login/character creation NUI που δεν έκλεισε σωστά), τα βελάκια/ESC
+-- σταματούν να φτάνουν στο παιχνίδι. Το /fixui το ξεκολλάει χειροκίνητα.
+-- ---------------------------------------------------
+RegisterCommand('fixui', function()
+    SetNuiFocus(false, false)
+    SetNuiFocusKeepInput(false)
+    lib.notify({
+        title = 'Olympus RolePlay',
+        description = 'NUI focus reset. Δοκίμασε ξανά τα βελάκια/ESC.',
+        type = 'inform'
+    })
+end, false)
+
+-- ---------------------------------------------------
 -- Health / Armor / Stamina — client-side statebags
 -- (πολλαπλά resources μπορούν να διαβάσουν LocalPlayer.state.olympus* αν χρειαστεί)
 -- ---------------------------------------------------

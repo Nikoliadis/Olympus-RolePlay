@@ -50,6 +50,31 @@ RegisterNUICallback('olympus_spawn:cancelCreation', function(_, cb)
 end)
 
 -- ---------------------------------------------------
+-- Lua-level fallback για ESC: αν για οποιονδήποτε λόγο το NUI (JS) δεν
+-- απαντήσει (π.χ. σφάλμα πριν προλάβει να ανοίξει σωστά το overlay), αυτό
+-- εγγυάται ότι το NUI focus δεν μένει κολλημένο για πάντα, μπλοκάροντας
+-- βελάκια/ESC στο υπόλοιπο παιχνίδι (π.χ. vMenu, pause menu).
+-- INPUT_FRONTEND_PAUSE = 200, INPUT_FRONTEND_PAUSE_ALTERNATE = 322
+-- ---------------------------------------------------
+CreateThread(function()
+    while true do
+        Wait(0)
+        if creationPromise then
+            if IsDisabledControlJustPressed(0, 200) or IsDisabledControlJustPressed(0, 322)
+                or IsControlJustPressed(0, 200) or IsControlJustPressed(0, 322) then
+                SetNuiFocus(false, false)
+                SendNUIMessage({ action = 'closeCreation' })
+                local p = creationPromise
+                creationPromise = nil
+                p:resolve(nil)
+            end
+        else
+            Wait(500)
+        end
+    end
+end)
+
+-- ---------------------------------------------------
 -- Cinematic spawn στο Job Center
 -- Καλείται από το qbx_core (patched createCharacter) αμέσως μετά τη δημιουργία χαρακτήρα.
 -- ---------------------------------------------------
