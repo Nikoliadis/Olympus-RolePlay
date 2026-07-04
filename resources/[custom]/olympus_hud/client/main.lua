@@ -148,6 +148,30 @@ local function updateClock()
 end
 
 -- ---------------------------------------------------
+-- Voice / Mic — pma-voice integration (proximity mode + αν μιλάει τώρα)
+-- ---------------------------------------------------
+local lastTalking = nil
+local lastVoiceMode = nil
+local function updateVoice()
+    local mode = 'Normal'
+    local talking = false
+
+    if GetResourceState('pma-voice') == 'started' then
+        local t = MumbleIsPlayerTalking(cache.playerId)
+        talking = t == true or t == 1
+        local prox = LocalPlayer.state.proximity
+        if prox and prox.mode then mode = prox.mode end
+    end
+
+    -- Στέλνουμε μόνο όταν αλλάζει κάτι (λιγότερα NUI messages).
+    if talking ~= lastTalking or mode ~= lastVoiceMode then
+        lastTalking = talking
+        lastVoiceMode = mode
+        nui('updateVoice', { mode = mode, talking = talking })
+    end
+end
+
+-- ---------------------------------------------------
 -- Show / Hide
 -- ---------------------------------------------------
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
@@ -172,6 +196,16 @@ CreateThread(function()
         if isVisible then
             updateVitalsState()
             updateAmmo()
+        end
+    end
+end)
+
+-- Το mic indicator πρέπει να είναι responsive (η ομιλία αλλάζει γρήγορα).
+CreateThread(function()
+    while true do
+        Wait(150)
+        if isVisible then
+            updateVoice()
         end
     end
 end)

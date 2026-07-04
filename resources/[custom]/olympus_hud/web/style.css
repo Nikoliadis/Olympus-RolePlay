@@ -1,177 +1,133 @@
-:root {
-    --gold: #C0A355;
-    --gold-dim: #C0A35599;
-    --bg: rgba(12, 12, 12, 0.82);
-    --bg-soft: rgba(20, 20, 20, 0.7);
-    --track: rgba(255, 255, 255, 0.08);
-    --health: #C0A355;
-    --armor: #8fa9c9;
-    --stamina: #7fc98f;
-    --hunger: #d99a4e;
-    --thirst: #4ea9d9;
-}
+/* Olympus RolePlay — HUD (dark/gold, Emerald-style circular gauges) */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
     width: 100%;
     height: 100%;
-    background: transparent;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    color: #eaeaea;
     overflow: hidden;
+    background: transparent;
+    font-family: 'Segoe UI', 'Rajdhani', Arial, sans-serif;
     user-select: none;
 }
 
 #hud {
-    position: fixed;
-    left: 1.4vw;
-    bottom: 1.4vh;
-    width: clamp(260px, 19vw, 340px);
-    background: var(--bg);
-    border: 1px solid var(--gold-dim);
-    border-radius: 10px;
-    padding: 12px 14px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-#hud.hidden {
-    opacity: 0;
-    transform: translateY(12px);
+    position: absolute;
+    inset: 0;
     pointer-events: none;
 }
 
-#top-row {
+#hud.hidden { display: none; }
+.hidden { display: none !important; }
+
+/* ---------------- Circular gauges ---------------- */
+#gauges {
+    position: absolute;
+    left: 20%;              /* δεξιά από το default minimap ώστε να μην κρύβεται */
+    bottom: 2.6%;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(192, 163, 85, 0.25);
-    padding-bottom: 8px;
+    gap: 10px;
+    align-items: flex-end;
 }
 
-#job-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 0.3px;
+.gauge {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,.6));
 }
 
-#job-grade {
-    font-size: 11px;
-    color: #b8b8b8;
-    margin-top: 1px;
+.gauge .ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg); /* ξεκινάει από πάνω */
 }
 
-#clock {
-    font-size: 14px;
-    font-weight: 600;
-    color: #eaeaea;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.5px;
+.ring-bg {
+    fill: none;
+    stroke: rgba(0, 0, 0, .55);
+    stroke-width: 4;
 }
 
-#stats-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 10px;
+.ring-fg {
+    fill: none;
+    stroke: var(--c, #C0A355);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 100.53;   /* 2π·16 */
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset .3s ease, stroke .2s ease;
 }
 
-#cash-panel, #ammo-panel {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    background: var(--bg-soft);
-    padding: 4px 9px;
-    border-radius: 6px;
-    border: 1px solid rgba(192, 163, 85, 0.15);
-    transition: opacity 0.25s ease, transform 0.25s ease;
+.gauge .ic {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+    fill: #fff;
+    opacity: .92;
 }
 
-#cash-value {
-    color: var(--gold);
-    font-variant-numeric: tabular-nums;
+/* Mic gauge: λάμπει χρυσό όταν ο παίκτης μιλάει */
+#g-voice.talking {
+    filter: drop-shadow(0 0 6px #C0A355) drop-shadow(0 0 12px rgba(192,163,85,.6));
+    animation: micpulse 1s ease-in-out infinite;
+}
+#g-voice.talking .ic { fill: #C0A355; opacity: 1; }
+
+@keyframes micpulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.08); }
 }
 
-#ammo-panel.hidden {
-    display: none;
-}
-
-.icon {
-    font-size: 13px;
-    line-height: 1;
-}
-
-#bars {
+/* ---------------- Money + ammo (bottom-center) ---------------- */
+#bottom-center {
+    position: absolute;
+    left: 50%;
+    bottom: 3%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 6px;
 }
 
-.bar-row {
+#money {
+    font-size: 26px;
+    font-weight: 700;
+    color: #37c871;
+    text-shadow: 0 2px 4px rgba(0,0,0,.8);
+    letter-spacing: .5px;
+}
+
+#ammo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    padding: 3px 12px;
+    background: rgba(10, 10, 12, .6);
+    border: 1px solid rgba(192, 163, 85, .35);
+    border-radius: 20px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
 }
+#ammo svg { width: 18px; height: 18px; fill: #C0A355; }
 
-.bar-row .icon {
-    width: 16px;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.bar-track {
-    flex: 1;
-    height: 7px;
-    background: var(--track);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fill-health   { background: var(--health); }
-.fill-armor    { background: var(--armor); }
-.fill-stamina  { background: var(--stamina); }
-.fill-hunger   { background: var(--hunger); }
-.fill-thirst   { background: var(--thirst); }
-
-.bar-row.pulse .bar-fill {
-    animation: pulse 0.5s ease;
-}
-
-@keyframes pulse {
-    0%   { filter: brightness(1); }
-    40%  { filter: brightness(1.6); }
-    100% { filter: brightness(1); }
-}
-
-.value-pop {
-    animation: pop 0.3s ease;
-}
-
-@keyframes pop {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.15); }
-    100% { transform: scale(1); }
-}
-
-/* Responsive: μικρότερες αναλύσεις */
-@media (max-width: 1280px) {
-    #hud { width: clamp(230px, 24vw, 320px); }
+/* ---------------- Voice mode label ---------------- */
+#voice-label {
+    position: absolute;
+    left: 20%;
+    bottom: calc(2.6% + 52px);
+    padding: 2px 10px;
+    background: rgba(10, 10, 12, .65);
+    border: 1px solid rgba(192, 163, 85, .4);
+    border-radius: 12px;
+    color: #C0A355;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    transform: translateX(-2px);
 }

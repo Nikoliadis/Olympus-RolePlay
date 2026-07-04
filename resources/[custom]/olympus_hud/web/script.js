@@ -1,42 +1,44 @@
+// Olympus RolePlay — HUD renderer (circular gauges + money + mic)
+
 const hud = document.getElementById('hud');
 
-const bars = {
-    health: document.querySelector('.fill-health'),
-    armor: document.querySelector('.fill-armor'),
-    stamina: document.querySelector('.fill-stamina'),
-    hunger: document.querySelector('.fill-hunger'),
-    thirst: document.querySelector('.fill-thirst'),
+const RING_CIRCUMFERENCE = 100.53; // 2π·16
+
+// bar-name -> gauge element id
+const GAUGE_IDS = {
+    health: 'g-health',
+    armor: 'g-armor',
+    hunger: 'g-hunger',
+    thirst: 'g-thirst',
+    stamina: 'g-stamina',
+    voice: 'g-voice',
 };
 
-const cashValue = document.getElementById('cash-value');
-const ammoPanel = document.getElementById('ammo-panel');
+const money = document.getElementById('money');
+const ammo = document.getElementById('ammo');
 const ammoValue = document.getElementById('ammo-value');
-const jobLabel = document.getElementById('job-label');
-const jobGrade = document.getElementById('job-grade');
-const clock = document.getElementById('clock');
+const voiceLabel = document.getElementById('voice-label');
 
-function formatCash(amount) {
-    return '€' + Math.max(0, Math.floor(amount)).toLocaleString('en-US');
+// Voice mode -> ποσοστό γεμίσματος του mic ring (εμβέλεια φωνής)
+const VOICE_RANGE_PCT = { Whisper: 33, Normal: 66, Shouting: 100 };
+
+function setRing(barName, value) {
+    const gauge = document.getElementById(GAUGE_IDS[barName]);
+    if (!gauge) return;
+    const fg = gauge.querySelector('.ring-fg');
+    if (!fg) return;
+    const pct = Math.max(0, Math.min(100, value));
+    fg.style.strokeDashoffset = (RING_CIRCUMFERENCE * (1 - pct / 100)).toFixed(2);
 }
 
-function pulseRow(bar) {
-    const el = bars[bar];
-    if (!el) return;
-    const row = el.closest('.bar-row');
-    row.classList.remove('pulse');
-    // force reflow so the animation can retrigger
-    void row.offsetWidth;
-    row.classList.add('pulse');
-}
-
-function popValue(el) {
-    el.classList.remove('value-pop');
-    void el.offsetWidth;
-    el.classList.add('value-pop');
+function formatMoney(amount) {
+    const n = Math.max(0, Math.floor(amount || 0));
+    // thousands separator με '.' (π.χ. 25000 -> $25.000)
+    return '$' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 window.addEventListener('message', (event) => {
-    const data = event.data;
+    const data = event.data || {};
 
     switch (data.action) {
         case 'show':
@@ -47,43 +49,41 @@ window.addEventListener('message', (event) => {
             hud.classList.add('hidden');
             break;
 
-        case 'updateBar': {
-            const el = bars[data.bar];
-            if (!el) break;
-            el.style.width = Math.max(0, Math.min(100, data.value)) + '%';
-            pulseRow(data.bar);
+        case 'updateBar':
+            setRing(data.bar, data.value);
             break;
-        }
 
         case 'updateCash':
-            cashValue.textContent = formatCash(data.value);
-            popValue(cashValue);
+            if (money) money.textContent = formatMoney(data.value);
             break;
 
         case 'updateAmmo':
+            if (!ammo) break;
             if (data.visible) {
-                ammoPanel.classList.remove('hidden');
-                ammoValue.textContent = data.value;
+                ammo.classList.remove('hidden');
+                if (ammoValue) ammoValue.textContent = data.value;
             } else {
-                ammoPanel.classList.add('hidden');
+                ammo.classList.add('hidden');
             }
             break;
 
-        case 'updateJob':
-            jobLabel.textContent = data.label;
-            jobGrade.textContent = data.grade || '';
+        case 'updateVoice': {
+            const gauge = document.getElementById('g-voice');
+            setRing('voice', VOICE_RANGE_PCT[data.mode] || 66);
+            if (gauge) gauge.classList.toggle('talking', !!data.talking);
+            if (voiceLabel) {
+                voiceLabel.textContent = data.mode || 'Normal';
+                voiceLabel.classList.toggle('hidden', !data.talking);
+            }
             break;
-
-        case 'updateClock':
-            clock.textContent = data.value;
-            break;
+        }
 
         case 'fullSync':
-            cashValue.textContent = formatCash(data.cash);
-            if (data.job) {
-                jobLabel.textContent = data.job.label;
-                jobGrade.textContent = data.job.grade || '';
-            }
+            if (money) money.textContent = formatMoney(data.cash);
+            break;
+
+        // updateJob / updateClock: δεν υπάρχουν στοιχεία σε αυτό το layout — αγνοούνται.
+        default:
             break;
     }
 });

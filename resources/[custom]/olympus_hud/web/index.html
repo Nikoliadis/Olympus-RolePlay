@@ -7,47 +7,47 @@
 </head>
 <body>
 <div id="hud" class="hidden">
-    <div id="top-row">
-        <div id="job-panel">
-            <div id="job-label">—</div>
-            <div id="job-grade"></div>
+
+    <!-- Circular status gauges (bottom-left) -->
+    <div id="gauges">
+        <div class="gauge" id="g-health" style="--c:#e0392b">
+            <svg class="ring" viewBox="0 0 40 40"><circle class="ring-bg" cx="20" cy="20" r="16"/><circle class="ring-fg" cx="20" cy="20" r="16"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.9 5 5.5 5c2 0 3.5 1.3 4.5 2.8C11 6.3 12.5 5 14.5 5 18.1 5 19.4 9 22 11.8 19.5 16.4 12 21 12 21z"/></svg>
         </div>
-        <div id="clock">00:00</div>
+        <div class="gauge" id="g-armor" style="--c:#2f6fed">
+            <svg class="ring" viewBox="0 0 40 40"><circle class="ring-bg" cx="20" cy="20" r="16"/><circle class="ring-fg" cx="20" cy="20" r="16"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 8.6-8 10-4.5-1.4-8-5-8-10V5l8-3z"/></svg>
+        </div>
+        <div class="gauge" id="g-hunger" style="--c:#e78b2f">
+            <svg class="ring" viewBox="0 0 40 40"><circle class="ring-bg" cx="20" cy="20" r="16"/><circle class="ring-fg" cx="20" cy="20" r="16"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M4 11a8 8 0 0 1 16 0H4zm0 2h16v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2zm2 6h12v1.2H6z"/></svg>
+        </div>
+        <div class="gauge" id="g-thirst" style="--c:#31b0d9">
+            <svg class="ring" viewBox="0 0 40 40"><circle class="ring-bg" cx="20" cy="20" r="16"/><circle class="ring-fg" cx="20" cy="20" r="16"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M12 2.5l5.5 5.5a7.8 7.8 0 1 1-11 0z"/></svg>
+        </div>
+        <div class="gauge" id="g-stamina" style="--c:#2fb96a">
+            <svg class="ring" viewBox="0 0 40 40"><circle class="ring-bg" cx="20" cy="20" r="16"/><circle class="ring-fg" cx="20" cy="20" r="16"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        </div>
+        <div class="gauge" id="g-voice" style="--c:#C0A355">
+            <svg class="ring" viewBox="0 0 40 40"><circle class="ring-bg" cx="20" cy="20" r="16"/><circle class="ring-fg" cx="20" cy="20" r="16"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M17 11a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21H9v2h6v-2h-2v-3.1A7 7 0 0 0 19 11h-2z"/></svg>
+        </div>
     </div>
 
-    <div id="stats-row">
-        <div id="cash-panel">
-            <span class="icon">💰</span>
-            <span id="cash-value">€0</span>
-        </div>
-        <div id="ammo-panel" class="hidden">
-            <span class="icon">🔫</span>
+    <!-- Money + ammo (bottom-center) -->
+    <div id="bottom-center">
+        <div id="ammo" class="hidden">
+            <svg viewBox="0 0 24 24"><path d="M3 8h12l2 3h4v3h-2l-2 3h-4l-1-2H6l-3-4V8z"/></svg>
             <span id="ammo-value">0</span>
         </div>
+        <div id="money">$0</div>
     </div>
 
-    <div id="bars">
-        <div class="bar-row" data-bar="health">
-            <span class="icon">❤️</span>
-            <div class="bar-track"><div class="bar-fill fill-health" style="width:100%"></div></div>
-        </div>
-        <div class="bar-row" data-bar="armor">
-            <span class="icon">🛡️</span>
-            <div class="bar-track"><div class="bar-fill fill-armor" style="width:0%"></div></div>
-        </div>
-        <div class="bar-row" data-bar="stamina">
-            <span class="icon">🏃</span>
-            <div class="bar-track"><div class="bar-fill fill-stamina" style="width:100%"></div></div>
-        </div>
-        <div class="bar-row" data-bar="hunger">
-            <span class="icon">🍔</span>
-            <div class="bar-track"><div class="bar-fill fill-hunger" style="width:100%"></div></div>
-        </div>
-        <div class="bar-row" data-bar="thirst">
-            <span class="icon">💧</span>
-            <div class="bar-track"><div class="bar-fill fill-thirst" style="width:100%"></div></div>
-        </div>
-    </div>
+    <!-- Voice mode label (πάνω από το mic gauge) -->
+    <div id="voice-label" class="hidden">Normal</div>
+
 </div>
 
 <script src="script.js"></script>

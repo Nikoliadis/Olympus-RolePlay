@@ -261,6 +261,8 @@ git_clone_resource "https://github.com/Qbox-project/qbx_phone.git"        "$QBOX
 git_clone_resource "https://github.com/Qbox-project/qbx_police.git"       "$QBOX_DIR" "qbx_police"
 git_clone_resource "https://github.com/qbcore-framework/qb-target.git"    "$STANDALONE_DIR" "qb-target"
 git_clone_resource "https://github.com/Bebicek/bd_loadingscreen.git"      "$STANDALONE_DIR" "bd_loadingscreen"
+# pma-voice: proximity voice (recommended για QBox). Source-only (Lua + committed NUI, χωρίς build step).
+git_clone_resource "https://github.com/AvarianKnight/pma-voice.git"       "$STANDALONE_DIR" "pma-voice"
 
 # ---------------------------------------------------
 # ΔΕΝ κατεβαίνουν αυτόματα (δες README για λεπτομέρειες):
