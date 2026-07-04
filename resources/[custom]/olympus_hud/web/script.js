@@ -14,7 +14,9 @@ const GAUGE_IDS = {
     voice: 'g-voice',
 };
 
-const money = document.getElementById('money');
+const moneyCash = document.getElementById('money-cash');
+const moneyBank = document.getElementById('money-bank');
+const moneyBlack = document.getElementById('money-black');
 const ammo = document.getElementById('ammo');
 const ammoValue = document.getElementById('ammo-value');
 const voiceLabel = document.getElementById('voice-label');
@@ -53,8 +55,10 @@ window.addEventListener('message', (event) => {
             setRing(data.bar, data.value);
             break;
 
-        case 'updateCash':
-            if (money) money.textContent = formatMoney(data.value);
+        case 'updateMoney':
+            if (moneyCash)  moneyCash.textContent  = formatMoney(data.cash);
+            if (moneyBank)  moneyBank.textContent  = formatMoney(data.bank);
+            if (moneyBlack) moneyBlack.textContent = formatMoney(data.black);
             break;
 
         case 'updateAmmo':
@@ -78,11 +82,7 @@ window.addEventListener('message', (event) => {
             break;
         }
 
-        case 'fullSync':
-            if (money) money.textContent = formatMoney(data.cash);
-            break;
-
-        // updateJob / updateClock: δεν υπάρχουν στοιχεία σε αυτό το layout — αγνοούνται.
+        // updateJob / updateClock / fullSync: δεν υπάρχουν στοιχεία σε αυτό το layout — αγνοούνται.
         default:
             break;
     }

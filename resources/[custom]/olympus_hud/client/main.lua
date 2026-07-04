@@ -76,15 +76,23 @@ AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.playerId), functio
 end)
 
 -- ---------------------------------------------------
--- Money — qbx_core στέλνει dedicated event ακριβώς για HUD resources
+-- Money — μετρητά (χέρι) / τράπεζα / μαύρα. Διαβάζονται πάντα φρέσκα από το
+-- PlayerData ώστε να είναι σωστά και τα 3 (το event δίνει μόνο έναν τύπο τη φορά).
 -- ---------------------------------------------------
-RegisterNetEvent('hud:client:OnMoneyChange', function(moneyType, amount, isRemove)
-    if moneyType ~= 'cash' then return end
+local function updateMoney()
+    local playerData = exports.qbx_core:GetPlayerData()
+    if not playerData or not playerData.money then return end
+    local m = playerData.money
+    currentCash = m.cash or 0
+    nui('updateMoney', {
+        cash  = m.cash or 0,
+        bank  = m.bank or 0,
+        black = m.black_money or 0,
+    })
+end
 
-    currentCash = math.max(0, currentCash + (isRemove and -amount or amount))
-    if isVisible then
-        nui('updateCash', { value = currentCash })
-    end
+RegisterNetEvent('hud:client:OnMoneyChange', function()
+    if isVisible then updateMoney() end
 end)
 
 -- ---------------------------------------------------
@@ -103,14 +111,11 @@ local function syncFromPlayerData()
     local playerData = exports.qbx_core:GetPlayerData()
     if not playerData or not playerData.citizenid then return end
 
-    currentCash = playerData.money and playerData.money.cash or 0
+    updateMoney()
 
-    nui('fullSync', {
-        cash = currentCash,
-        job = {
-            label = playerData.job and playerData.job.label or '—',
-            grade = playerData.job and playerData.job.grade.name or ''
-        }
+    nui('updateJob', {
+        label = playerData.job and playerData.job.label or '—',
+        grade = playerData.job and playerData.job.grade.name or ''
     })
 end
 

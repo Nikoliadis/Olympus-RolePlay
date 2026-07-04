@@ -116,6 +116,9 @@ ensure vMenu
 ensure bd_loadingscreen
 ensure RemoveAllNPCs
 ## pma-voice — proximity voice (Whisper/Normal/Shouting, cycle με F11). Απαιτεί OneSync.
+## voice_enableUi 0: σβήνει το built-in UI του pma-voice ("Currently Talking" πάνω +
+## "Normal [Range]" κάτω-δεξιά) — το δικό μας olympus_hud δείχνει ήδη το mic/range.
+setr voice_enableUi 0
 ensure pma-voice
 # ensure <standalone_resource>
 
