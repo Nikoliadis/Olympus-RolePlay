@@ -117,12 +117,14 @@ ensure bd_loadingscreen
 ensure RemoveAllNPCs
 # ensure <standalone_resource>
 
-## 14. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
-##     το olympus_spawn πρέπει να τρέχει πριν χρειαστεί το qbx_core
-##     (character creation), το olympus_jobcenter χρειάζεται το qbx_core
-##     ήδη ενεργό για SetJob.
-## ΠΡΟΣΩΡΙΝΑ ΑΠΕΝΕΡΓΟΠΟΙΗΜΕΝΑ για diagnostic (vMenu/ESC stuck issue) —
-## ξανα-ενεργοποίησέ τα (αφαίρεσε τα #) μόλις τελειώσει το testing.
+## 14. [custom] resources — δικά μας scripts.
+## olympus_blips: καθαρό Lua-only resource με τα map blips (Job Center κ.λπ.).
+ensure olympus_blips
+##
+## Το spawn/character creation γίνεται πλέον native μέσα από το qbx_core + illenium
+## (single character, auto spawn — δες config/client.lua & client/character.lua),
+## οπότε ΔΕΝ χρειαζόμαστε πια το παλιό custom olympus_spawn NUI (που προκαλούσε το
+## ESC/NUI-stuck bug). Τα παρακάτω μένουν απενεργοποιημένα:
 # ensure olympus_spawn
 # ensure olympus_hud
 # ensure olympus_jobcenter
