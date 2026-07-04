@@ -16,6 +16,7 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 | Vehicle ownership | [qbx_vehicles](https://github.com/Qbox-project/qbx_vehicles) |
 | Jobs / properties | qbx_garages, qbx_vehicleshop, qbx_taxijob, qbx_mechanicjob, qbx_properties, qbx_police, qbx_ambulancejob, qbx_truckrobbery, qbx_phone (όλα [Qbox-project](https://github.com/Qbox-project)) |
 | Loading screen | [bd_loadingscreen](https://github.com/Bebicek/bd_loadingscreen) |
+| NPC/traffic cleanup | RemoveAllNPCs (χειροκίνητα προστιθέμενο, βλ. παρακάτω) |
 | Database | MariaDB |
 | Scripts | Lua (server/client), JavaScript (Discord bot) |
 
@@ -79,6 +80,12 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 Το [bd_loadingscreen](https://github.com/Bebicek/bd_loadingscreen) εμφανίζει custom loading screen με μουσική στο `resources/[standalone]/bd_loadingscreen/song/` (δέχεται `song1.mp3`, `song2.mp3`, `song3.mp3` — παίζουν τυχαία). Controls μέσα στο loading screen: **Space** (play/stop), **↑/↓** (ένταση), **←/→** (αλλαγή τραγουδιού).
 
 > **Σημαντικό για τη μουσική:** μπες εσύ τα δικά σου mp3 αρχεία στον φάκελο `song/` — βεβαιώσου ότι έχεις το νόμιμο δικαίωμα χρήσης τους (αγορασμένο, royalty-free, ή δική σου δημιουργία). Καλές δωρεάν/legal πηγές: [YouTube Audio Library](https://www.youtube.com/audiolibrary), [Pixabay Music](https://pixabay.com/music/), [Free Music Archive](https://freemusicarchive.org/), [incompetech.com](https://incompetech.com/) (Kevin MacLeod, CC-BY licensed).
+
+### RemoveAllNPCs (χειροκίνητα προστιθέμενο)
+
+Το `resources/[standalone]/RemoveAllNPCs/` σβήνει τον ambient πληθυσμό (πεζοί, οχήματα, random events) για καθαρότερο RP experience — `SetPedPopulationBudget(0)`, `SetVehiclePopulationBudget(0)`, `SetRandomEventFlag(false)`, και disable σε ~55 τύπους ambient scenarios μέσω `popcycle.dat`.
+
+> Δεν υπάρχει γνωστό public GitHub repo για αυτό το resource, οπότε **δεν** κατεβαίνει μέσω `install.sh` — τα αρχεία (`client.lua`, `fxmanifest.lua`, `popcycle.dat`) είναι committed απευθείας στο repo (δεν είναι στο `.gitignore`, σε αντίθεση με τα υπόλοιπα third-party `[standalone]` resources).
 
 ### Resources που ΔΕΝ κατεβαίνουν αυτόματα
 

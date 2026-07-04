@@ -114,15 +114,18 @@ ensure qbx_phone
 ## αυτόματα, βλ. README για χειροκίνητη εγκατάσταση αν το χρειαστείς.
 ensure vMenu
 ensure bd_loadingscreen
+ensure RemoveAllNPCs
 # ensure <standalone_resource>
 
 ## 14. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:
 ##     το olympus_spawn πρέπει να τρέχει πριν χρειαστεί το qbx_core
 ##     (character creation), το olympus_jobcenter χρειάζεται το qbx_core
 ##     ήδη ενεργό για SetJob.
-ensure olympus_spawn
-ensure olympus_hud
-ensure olympus_jobcenter
+## ΠΡΟΣΩΡΙΝΑ ΑΠΕΝΕΡΓΟΠΟΙΗΜΕΝΑ για diagnostic (vMenu/ESC stuck issue) —
+## ξανα-ενεργοποίησέ τα (αφαίρεσε τα #) μόλις τελειώσει το testing.
+# ensure olympus_spawn
+# ensure olympus_hud
+# ensure olympus_jobcenter
 
 ### ---------------------------------------------------
 ### vMenu — staff/admin only permissions
