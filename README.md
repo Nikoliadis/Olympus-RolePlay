@@ -15,6 +15,7 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 | Target/interaction | [ox_target](https://github.com/overextended/ox_target), [qb-target](https://github.com/qbcore-framework/qb-target), [PolyZone](https://github.com/mkafrin/PolyZone) |
 | Vehicle ownership | [qbx_vehicles](https://github.com/Qbox-project/qbx_vehicles) |
 | Jobs / properties | qbx_garages, qbx_vehicleshop, qbx_taxijob, qbx_mechanicjob, qbx_properties, qbx_police, qbx_ambulancejob, qbx_truckrobbery, qbx_phone (όλα [Qbox-project](https://github.com/Qbox-project)) |
+| Loading screen | [bd_loadingscreen](https://github.com/Bebicek/bd_loadingscreen) |
 | Database | MariaDB |
 | Scripts | Lua (server/client), JavaScript (Discord bot) |
 
@@ -69,8 +70,15 @@ FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https:
 - `qbx_phone` → `resources/[qbox]/qbx_phone`
 - `qbx_police` → `resources/[qbox]/qbx_police` (το repo `qbx_policejob` έχει μετονομαστεί σε `qbx_police` upstream)
 - `qb-target` → `resources/[standalone]/qb-target`
+- `bd_loadingscreen` → `resources/[standalone]/bd_loadingscreen`
 
 Χρειάζεται `git` εγκατεστημένο για αυτά — το script το ελέγχει και σταματάει με σαφές μήνυμα αν λείπει.
+
+### Loading Screen (`bd_loadingscreen`)
+
+Το [bd_loadingscreen](https://github.com/Bebicek/bd_loadingscreen) εμφανίζει custom loading screen με μουσική στο `resources/[standalone]/bd_loadingscreen/song/` (δέχεται `song1.mp3`, `song2.mp3`, `song3.mp3` — παίζουν τυχαία). Controls μέσα στο loading screen: **Space** (play/stop), **↑/↓** (ένταση), **←/→** (αλλαγή τραγουδιού).
+
+> **Σημαντικό για τη μουσική:** μπες εσύ τα δικά σου mp3 αρχεία στον φάκελο `song/` — βεβαιώσου ότι έχεις το νόμιμο δικαίωμα χρήσης τους (αγορασμένο, royalty-free, ή δική σου δημιουργία). Καλές δωρεάν/legal πηγές: [YouTube Audio Library](https://www.youtube.com/audiolibrary), [Pixabay Music](https://pixabay.com/music/), [Free Music Archive](https://freemusicarchive.org/), [incompetech.com](https://incompetech.com/) (Kevin MacLeod, CC-BY licensed).
 
 ### Resources που ΔΕΝ κατεβαίνουν αυτόματα
 

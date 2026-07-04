@@ -113,6 +113,7 @@ ensure qbx_phone
 ## build (δεν υπάρχουν built dist/ αρχεία στο raw source) — δεν κατεβαίνει
 ## αυτόματα, βλ. README για χειροκίνητη εγκατάσταση αν το χρειαστείς.
 ensure vMenu
+ensure bd_loadingscreen
 # ensure <standalone_resource>
 
 ## 14. [custom] resources — δικά μας scripts. Η σειρά έχει σημασία:

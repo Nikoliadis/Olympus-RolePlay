@@ -260,6 +260,7 @@ git_clone_resource "https://github.com/Qbox-project/qbx_phone.git"        "$QBOX
 # Σημείωση: το "qbx_policejob" έχει μετονομαστεί σε "qbx_police" upstream.
 git_clone_resource "https://github.com/Qbox-project/qbx_police.git"       "$QBOX_DIR" "qbx_police"
 git_clone_resource "https://github.com/qbcore-framework/qb-target.git"    "$STANDALONE_DIR" "qb-target"
+git_clone_resource "https://github.com/Bebicek/bd_loadingscreen.git"      "$STANDALONE_DIR" "bd_loadingscreen"
 
 # ---------------------------------------------------
 # ΔΕΝ κατεβαίνουν αυτόματα (δες README για λεπτομέρειες):
