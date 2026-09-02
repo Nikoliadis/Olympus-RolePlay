@@ -84,6 +84,9 @@ ensure qbx_vehicles
 ## 8. ox_inventory (inventory system, εξαρτάται από qbx_core)
 ensure ox_inventory
 
+## 8.1 ox_fuel — σύστημα καυσίμων (βενζινάδικα + petrol can). Μετά το ox_inventory.
+ensure ox_fuel
+
 ## 9. ox_target — target-based interaction (χρησιμοποιείται από το olympus_jobcenter)
 ensure ox_target
 
