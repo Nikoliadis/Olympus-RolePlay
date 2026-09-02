@@ -17,6 +17,8 @@ sets sv_projectName "Olympus RolePlay"
 sets sv_projectDesc "Greek FiveM Roleplay Server"
 sets tags "roleplay, qbox, greek"
 sets locale "en-US"
+## Olympus RolePlay: γλώσσα in-game UI = Ελληνικά (ox_lib, ox_inventory + qbx resources).
+setr ox:locale "el"
 
 ### ---------------------------------------------------
 ### License Key
