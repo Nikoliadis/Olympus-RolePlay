@@ -255,6 +255,7 @@ git_clone_resource "https://github.com/Qbox-project/qbx_mechanicjob.git"  "$QBOX
 git_clone_resource "https://github.com/Qbox-project/qbx_properties.git"   "$QBOX_DIR" "qbx_properties"
 git_clone_resource "https://github.com/Qbox-project/qbx_taxijob.git"      "$QBOX_DIR" "qbx_taxijob"
 git_clone_resource "https://github.com/Qbox-project/qbx_vehicleshop.git" "$QBOX_DIR" "qbx_vehicleshop"
+git_clone_resource "https://github.com/Qbox-project/qbx_medical.git"      "$QBOX_DIR" "qbx_medical"
 git_clone_resource "https://github.com/Qbox-project/qbx_ambulancejob.git" "$QBOX_DIR" "qbx_ambulancejob"
 git_clone_resource "https://github.com/Qbox-project/qbx_phone.git"        "$QBOX_DIR" "qbx_phone"
 # Σημείωση: το "qbx_policejob" έχει μετονομαστεί σε "qbx_police" upstream.

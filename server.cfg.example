@@ -103,6 +103,8 @@ ensure qbx_mechanicjob
 ensure qbx_properties
 ## το "qbx_policejob" έχει μετονομαστεί σε "qbx_police" upstream
 ensure qbx_police
+## qbx_medical: σύστημα θανάτου/τραυματισμού + /revive, /aheal (dependency του ambulance).
+ensure qbx_medical
 ensure qbx_ambulancejob
 ensure qbx_truckrobbery
 ensure qbx_phone
