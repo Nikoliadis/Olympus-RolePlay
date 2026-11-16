@@ -1,5 +1,34 @@
 # Olympus RolePlay
 
+![Lua](https://img.shields.io/badge/Lua-2C2D72?style=for-the-badge&logo=lua&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
+![FiveM](https://img.shields.io/badge/FiveM-F40552?style=for-the-badge&logo=fivem&logoColor=white)
+
+*English summary below · [Ελληνικά](#ελληνικά)*
+
+A Greek **FiveM roleplay server** (multiplayer GTA V) that I set up, customise and maintain,
+built on the open-source **QBox framework**.
+
+**What I built myself**
+
+- **Custom resources in Lua + NUI (HTML/CSS/JS):** a player HUD (`olympus_hud`), a character
+  creation and spawn flow (`olympus_spawn`), a job center with configurable jobs and wages
+  (`olympus_jobcenter`) and map blips (`olympus_blips`). Client/server event architecture,
+  with a server-side check on job changes.
+- **Automated dependency installer (`install.sh`):** downloads about 20 third-party resources
+  from GitHub Releases (with GitHub API lookups for versioned assets) or via shallow clones,
+  checks prerequisites and skips anything already installed.
+- **Clean repository design:** third-party code stays out of git (like `node_modules`), and the
+  repo only keeps my own code, configuration, permissions and SQL.
+- **Debugging and documentation:** load order, a black-screen bug traced to a missing
+  `spawnmanager` export, and case-sensitive resource names. All of it is documented below.
+
+<a id="ελληνικά"></a>
+
+---
+
 FiveM roleplay server χτισμένος πάνω στο [QBox Framework](https://github.com/Qbox-project/qbx_core).
 
 ## Stack
